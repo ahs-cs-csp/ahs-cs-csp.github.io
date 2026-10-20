@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AHS CS Principles</title>
+<style>
+:root{
+  --bg:#eef0f3; --panel:#fff; --ink:#18212b; --ink-soft:#5b6674; --rule:#d5dae1; --accent:#2f6fde;
+  --ui:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){:root{
+  --bg:#12171d; --panel:#1b232c; --ink:#e9edf2; --ink-soft:#9aa5b3; --rule:#2f3a47; --accent:#6ea0ff; color-scheme:dark;
+}}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--ui);line-height:1.55;padding:40px 16px 56px}
+.wrap{max-width:640px;margin:0 auto;display:flex;flex-direction:column;gap:26px}
+h1{font-size:1.6rem;margin:0}
+.sub{color:var(--ink-soft);margin:6px 0 0}
+h2{font-size:.78rem;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-soft);margin:0 0 10px;font-family:var(--mono)}
+.list{display:flex;flex-direction:column;gap:10px}
+a.card{display:flex;flex-direction:column;gap:3px;text-decoration:none;color:inherit;background:var(--panel);
+  border:1px solid var(--rule);border-left:4px solid var(--accent);border-radius:8px;padding:14px 16px}
+a.card:hover{border-color:var(--accent)}
+a.card:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.name{font-weight:600}
+.desc{font-size:.88rem;color:var(--ink-soft)}
+footer{font-size:.82rem;color:var(--ink-soft);border-top:1px solid var(--rule);padding-top:14px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>AHS CS Principles</h1>
+    <p class="sub">Games and practice pages for class. Everything runs in the browser.</p>
+  </header>
+  <section>
+    <h2>Games</h2>
+    <div class="list">
+      <a class="card" href="mastermind.html">
+        <span class="name">Two-Player Mastermind</span>
+        <span class="desc">One player makes a secret 4-color code and gives the clues; the other has 10 guesses to crack it. Play it to see what your program needs to do.</span>
+      </a>
+    </div>
+  </section>
+  <footer>Albany High School &middot; CS Principles</footer>
+</div>
+</body>
+</html>
