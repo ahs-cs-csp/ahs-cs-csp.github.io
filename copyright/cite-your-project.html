@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cite Your Project</title>
+<style>
+:root{
+  --bg:#eef0f3; --panel:#fff; --ink:#18212b; --ink-soft:#5b6674; --rule:#d5dae1; --accent:#2f6fde;
+  --yes:#1f7a4d; --yes-bg:#e6f4ec; --no:#b3261e; --no-bg:#fbeae9; --warn:#8a5a00; --warn-bg:#fdf3e2;
+  --motion:#4a6cd4; --looks:#8f56e0; --control:#e6a822; --sensing:#0f9ec4; --oper:#5cb712;
+  --ui:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){:root{
+  --bg:#12171d; --panel:#1b232c; --ink:#e9edf2; --ink-soft:#9aa5b3; --rule:#2f3a47; --accent:#6ea0ff;
+  --yes:#6ddc9f; --yes-bg:#15301f; --no:#ff9b93; --no-bg:#3a1b19; --warn:#f0c173; --warn-bg:#352a14;
+  color-scheme:dark;
+}}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--ui);line-height:1.55;padding:40px 16px 56px}
+.wrap{max-width:760px;margin:0 auto;display:flex;flex-direction:column;gap:26px}
+h1{font-size:1.6rem;margin:0}
+.sub{color:var(--ink-soft);margin:6px 0 0}
+h2{font-size:.78rem;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-soft);margin:0 0 12px;font-family:var(--mono)}
+.panel{background:var(--panel);border:1px solid var(--rule);border-radius:8px;padding:18px 20px}
+.note{font-size:.88rem;color:var(--ink-soft)}
+a{color:var(--accent)}
+button{font:inherit;font-size:.92rem;padding:9px 14px;border-radius:7px;border:1px solid var(--rule);
+  background:var(--panel);color:var(--ink);cursor:pointer}
+button:hover{border-color:var(--accent)}
+button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+button[disabled]{cursor:default;opacity:.55}
+
+/* snap-ish blocks */
+.blk{display:inline-block;font-family:var(--ui);font-size:.84rem;color:#fff;padding:3px 10px;border-radius:11px;
+  margin:2px 0;line-height:1.45;box-shadow:inset 0 -1px 0 rgba(0,0,0,.18)}
+.blk.motion{background:var(--motion)} .blk.looks{background:var(--looks)}
+.blk.control{background:var(--control);color:#2a2000} .blk.sensing{background:var(--sensing)}
+.blk.oper{background:var(--oper)}
+.blk .slot{background:rgba(255,255,255,.85);color:#18212b;border-radius:8px;padding:0 6px;margin:0 2px;font-size:.8rem}
+.script{background:var(--bg);border:1px solid var(--rule);border-radius:7px;padding:12px 14px;margin:10px 0 0}
+.script .ind{display:block;padding-left:20px}
+
+/* ingredients */
+.ing{border:1px solid var(--rule);border-left:4px solid var(--accent);border-radius:7px;padding:14px 16px;margin:0 0 12px;background:var(--panel)}
+.ing.done{border-left-color:var(--ink-soft)}
+.ihead{display:flex;justify-content:space-between;gap:12px;align-items:baseline;flex-wrap:wrap}
+.iname{font-weight:600}
+.ikind{font-family:var(--mono);font-size:.73rem;color:var(--ink-soft);white-space:nowrap}
+.iwhere{margin:6px 0 10px;font-size:.92rem}
+.iwhere em{color:var(--ink-soft);font-style:normal}
+.btns{display:flex;gap:8px;flex-wrap:wrap}
+.ans{border-radius:7px;padding:12px 14px;margin-top:11px}
+.ans.yes{background:var(--yes-bg);border:1px solid var(--yes)}
+.ans.no{background:var(--no-bg);border:1px solid var(--no)}
+.ans.warn{background:var(--warn-bg);border:1px solid var(--warn)}
+.ans .v{font-weight:700;display:block;margin-bottom:4px}
+.ans.yes .v{color:var(--yes)} .ans.no .v{color:var(--no)} .ans.warn .v{color:var(--warn)}
+.ans p{margin:6px 0 0;font-size:.92rem}
+.cite{font-family:var(--mono);font-size:.82rem;background:var(--panel);border:1px solid var(--rule);
+  border-radius:6px;padding:9px 11px;margin-top:9px;white-space:pre-wrap;word-break:break-word}
+.tally{font-family:var(--mono);font-size:.85rem;color:var(--ink-soft)}
+
+table{width:100%;border-collapse:collapse;font-size:.9rem}
+th,td{text-align:left;padding:7px 9px;border-bottom:1px solid var(--rule);vertical-align:top}
+th{font-family:var(--mono);font-size:.74rem;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-soft)}
+td code{font-family:var(--mono);font-size:.84rem}
+.big{background:var(--warn-bg);border:1px solid var(--warn);border-radius:7px;padding:14px 16px}
+footer{font-size:.82rem;color:var(--ink-soft);border-top:1px solid var(--rule);padding-top:14px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <h1>Cite Your Project</h1>
+    <p class="sub">Part 6 of 6 &middot; Unit 2 Lab 5. Everything you have learned, applied to the thing you will actually be graded on. Below is a made-up student project. Your job is to work out what has to be credited &mdash; and what does not.</p>
+  </header>
+
+  <section class="panel">
+    <h2>The project: Skyhop</h2>
+    <p style="margin:0 0 4px">A one-screen platformer. Your character runs and jumps between platforms collecting coins, and the game ends when you fall off the bottom.</p>
+    <p class="note" style="margin:0">Here is the main script. It looks like plenty of CSP projects &mdash; which is the point.</p>
+    <div class="script">
+      <span class="blk control">when <span class="slot">green flag</span> clicked</span><br>
+      <span class="blk looks">switch to costume <span class="slot">hopper</span></span><br>
+      <span class="blk motion">go to x: <span class="slot">0</span> y: <span class="slot">-120</span></span><br>
+      <span class="blk control">repeat until <span class="slot">y position &lt; -180</span></span><br>
+      <span class="ind">
+        <span class="blk motion">handle gravity and platform collision</span><br>
+        <span class="blk control">if <span class="slot">touching coin?</span></span><br>
+        <span class="ind">
+          <span class="blk sensing">play sound <span class="slot">coin-ding</span></span><br>
+          <span class="blk oper">add 1 to score</span><br>
+          <span class="blk looks">show score banner</span>
+        </span><br>
+        <span class="blk motion">wrap around edges</span>
+      </span><br>
+      <span class="blk looks">say <span class="slot">Game over</span></span>
+    </div>
+  </section>
+
+  <section class="panel">
+    <h2>Where each piece came from</h2>
+    <p class="note" style="margin:0 0 16px">Seven ingredients. For each one, decide with your partner <strong>before</strong> you reveal. Not all of them need a citation &mdash; part of the skill is knowing which.</p>
+    <div id="ings"></div>
+    <p class="tally" id="tally" style="margin:14px 0 0"></p>
+  </section>
+
+  <section class="panel">
+    <h2>How to actually write it</h2>
+    <p class="note" style="margin:0 0 12px">Different kinds of borrowing get credited differently. For anything under a Creative Commons license, the four things you need are <strong>T</strong>itle, <strong>A</strong>uthor, <strong>S</strong>ource, <strong>L</strong>icense &mdash; TASL.</p>
+    <table>
+      <tr><th>What you borrowed</th><th>What to write</th></tr>
+      <tr><td>Image or sound<br><span class="note">CC licensed</span></td>
+          <td><code>"Title" by Author, from Source, licensed CC BY 4.0</code></td></tr>
+      <tr><td>Image or sound<br><span class="note">public domain / CC0</span></td>
+          <td><code>"Title" by Author, from Source (CC0 &mdash; no credit required, given anyway)</code></td></tr>
+      <tr><td>Code from a website</td>
+          <td><code>Block adapted from [page title], [url], accessed [date]</code></td></tr>
+      <tr><td>Code from a person</td>
+          <td><code>Block written by [name], used with permission</code></td></tr>
+      <tr><td>Code from an AI tool</td>
+          <td><code>Generated with [tool], [date], from the prompt: "[your prompt]"</code></td></tr>
+    </table>
+    <p class="note" style="margin:12px 0 0"><strong>Where it goes in Snap!:</strong> right-click the block &rarr; <em>add comment</em>, and put the credit on the block itself. Then collect every credit in one comment on the stage, so a reader can see all of it in one place without hunting.</p>
+  </section>
+
+  <section class="panel">
+    <h2>The part people get wrong</h2>
+    <div class="big">
+      <strong>Citing borrowed code does not make it yours.</strong>
+      <p style="margin:8px 0 0">On the real Create Task you are asked to show code <em>you</em> developed. Anything you borrowed &mdash; even perfectly cited &mdash; cannot be the thing you point to as your own work. So the gravity block is fine to use and fine to cite, but it cannot be the algorithm you present.</p>
+      <p style="margin:8px 0 0">There is a second trap. You are expected to be able to <strong>explain what your program does</strong>. Pasting in a block you cannot read is risky even when you credit it honestly.</p>
+      <p style="margin:8px 0 0">And the reason to be scrupulous is not only honesty: clear citation is what makes the rest of the project visibly <em>yours</em>.</p>
+    </div>
+    <p class="note" style="margin:12px 0 0">Check the exact wording of this year's requirements with your teacher before you submit &mdash; College Board updates the task, and the rule that matters is the one in force when you turn it in.</p>
+  </section>
+
+  <section class="panel">
+    <h2>In your pair doc</h2>
+    <ul style="margin:0;padding-left:18px">
+      <li>Which ingredient did you and your partner disagree about? Why?</li>
+      <li>The background image has no findable license. Explain why &ldquo;I credited it&rdquo; does not solve that problem.</li>
+      <li>Write a full TASL credit for the coin sound as if you were putting it in your own project.</li>
+      <li>Skyhop cites the gravity block properly. The student still has a problem. What is it?</li>
+      <li>Name one thing in a project of yours that would need crediting, and one that would not.</li>
+    </ul>
+  </section>
+
+  <footer>Albany High School &middot; CS Principles &middot; <a href="index.html">Back to the unit</a></footer>
+</div>
+
+<script>
+var ING = [
+  {
+    name:'The character sprite', kind:'image',
+    where:'Downloaded a free platformer art pack from a game-asset site. The site says the pack is released <em>CC0 &mdash; no rights reserved</em>.',
+    answer:'yes', verdict:'Credit it — even though you do not legally have to.',
+    why:'CC0 means the author gave up their rights, so no attribution is <em>required</em>. Crediting anyway costs you nothing, is the norm among people who make things, and shows a reader which art is not yours.',
+    cite:'"Platformer Pack" by Kenney, from kenney.nl (CC0 — no credit required, given anyway)'
+  },
+  {
+    name:'The background image', kind:'image',
+    where:'Searched Google Images for &ldquo;pixel sky background&rdquo; and saved one that looked right. No author, no site, no license information.',
+    answer:'no', verdict:'Do not use it at all.',
+    cls:'no',
+    why:'This is the trap. The question was never &ldquo;do I credit it?&rdquo; &mdash; it is &ldquo;am I allowed to use it?&rdquo; A Google Images result is a search result, not a license. Unless you can find who made it and what they permit, assume it is all rights reserved. Crediting something you had no right to use does not make it legal; it just documents what you did.',
+    cite:'— replace it. Search a CC or CC0 source and credit that one instead.'
+  },
+  {
+    name:'The coin sound', kind:'sound',
+    where:'From a free sound library, uploaded by a user, licensed <em>CC BY 4.0</em>.',
+    answer:'yes', verdict:'Credit it — required, and the license says exactly how.',
+    why:'BY is the one condition every CC license carries. You may use it commercially, remix it, build on it — you just have to name the author. Use TASL.',
+    cite:'"Coin Ding" by jsfxr_user, from freesound.org, licensed CC BY 4.0'
+  },
+  {
+    name:'handle gravity and platform collision', kind:'code · complex',
+    where:'Copied from a forum post. About 40 blocks: velocity, acceleration, collision detection against every platform, and resolving the overlap so the sprite lands on top instead of sinking through.',
+    answer:'yes', verdict:'Credit it — and read the warning below.',
+    cls:'warn',
+    why:'Nobody expects a CSP student to write a collision resolver. Using it is fine. But cite it, and understand that borrowed code cannot be the code you present as your own — see the section below.',
+    cite:'Block adapted from "2D platformer physics in Snap!", snap.berkeley.edu/forum/..., accessed 14 Oct 2026'
+  },
+  {
+    name:'wrap around edges', kind:'code · a person',
+    where:'Your partner from last unit wrote it and sent it to you. Six blocks.',
+    answer:'yes', verdict:'Credit them by name.',
+    why:'A person is a source. It does not matter that they are fourteen, that it was a favour, or that it is only six blocks — you did not write it, so you say who did.',
+    cite:'Block written by Maya Ortiz, used with permission'
+  },
+  {
+    name:'show score banner', kind:'code · AI',
+    where:'You asked an AI chatbot to write a block that displays the score in the corner with a drop shadow. You pasted in what it gave you.',
+    answer:'yes', verdict:'Credit the tool and the prompt.',
+    why:'You did not write it, so it is not yours to present as your own. Say which tool, when, and what you asked for — the prompt matters, because it shows how much of the thinking was yours. Policies on AI are changing fast, so check what your teacher and College Board require this year.',
+    cite:'Generated with an AI assistant, 14 Oct 2026, from the prompt:\n"Snap! block to display a score in the top corner with a drop shadow"'
+  },
+  {
+    name:'The repeat-until game loop', kind:'code · yours',
+    where:'You wrote it yourself after seeing the same pattern in class, in BJC, and in roughly every game ever made.',
+    answer:'none', verdict:'No citation needed.',
+    cls:'warn',
+    why:'A standard construct is not someone’s property. Nobody owns the idea of a loop that runs until the game ends, any more than anyone owns the idea of a paragraph. Copyright protects a particular expression, not the technique — the same idea/expression line you met in the Blurred Lines case. Cite <em>sources</em>, not <em>concepts</em>: over-citing muddies what you actually borrowed.',
+    cite:'— nothing to write.'
+  }
+];
+
+var host = document.getElementById('ings');
+var done = 0, right = 0;
+
+ING.forEach(function(it, i){
+  var el = document.createElement('div');
+  el.className = 'ing';
+  el.innerHTML =
+    '<div class="ihead"><span class="iname">' + (i+1) + '. ' + it.name + '</span>' +
+    '<span class="ikind">' + it.kind + '</span></div>' +
+    '<p class="iwhere"><em>Where it came from:</em> ' + it.where + '</p>' +
+    '<div class="btns">' +
+      '<button type="button" data-a="yes">Needs a citation</button>' +
+      '<button type="button" data-a="none">No citation needed</button>' +
+      '<button type="button" data-a="no">Cannot use it at all</button>' +
+    '</div>' +
+    '<div class="ans" hidden></div>';
+
+  var btns = el.querySelectorAll('button');
+  var ans = el.querySelector('.ans');
+
+  btns.forEach(function(b){
+    b.addEventListener('click', function(){
+      btns.forEach(function(x){ x.disabled = true; });
+      el.classList.add('done');
+      var ok = b.dataset.a === it.answer;
+      ans.className = 'ans ' + (it.cls || (it.answer === 'yes' ? 'yes' : 'warn'));
+      ans.innerHTML =
+        '<span class="v">' + it.verdict + '</span>' +
+        '<p>' + it.why + '</p>' +
+        '<div class="cite">' + it.cite + '</div>' +
+        '<p class="note">' + (ok ? 'You had it right.' : 'You said something else — read the reason above.') + '</p>';
+      ans.hidden = false;
+      done++; if (ok) right++;
+      document.getElementById('tally').textContent =
+        right + ' of ' + done + ' right' + (done === ING.length ? '. Two of the seven were not simple yes-cite answers.' : '.');
+    });
+  });
+
+  host.appendChild(el);
+});
+</script>
+</body>
+</html>
