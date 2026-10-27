@@ -70,18 +70,26 @@ type that.
 - **One vote per device per period** is enforced in the browser's localStorage.
   A student who knows what they're doing can clear it and vote again. For a
   classroom that's fine; don't use this to grade anything.
-- **Answers are anonymous.** The Sheet stores a timestamp, the period and six
-  0/1 values. No names, no accounts, no IP addresses.
+- **Answers are anonymous.** The Sheet stores a timestamp, the period, six 0/1
+  values and which part the row came from. No names, no accounts, no IP addresses.
 - **Changing the script needs a redeploy** — Deploy → Manage deployments → ✏ →
   Version: New version. The `/exec` URL stays the same, so nothing in `poll.html`
   has to change. Takes about 30 seconds.
 - **If it dies mid-class**, the page shows a banner with a link that switches to
   hand-count mode. You keep the lesson, you just lose the animation. You can also
   go straight there with `poll.html?view=hand`.
-- **Why JSONP and not a normal POST?** Apps Script web apps don't return usable
-  CORS headers, so a `fetch()` from the page would be blocked by the browser.
-  A `<script>` tag isn't subject to that rule, and six yes/no answers fit in a
-  query string easily.
+- **Why `fetch` with credentials omitted?** A `<script>` tag sends the browser's
+  Google cookies. If the viewer is signed into a Google account that cannot see
+  the script — a school account, when the script belongs to a personal one —
+  Google answers with an error page and the poll looks dead for no visible
+  reason. The deployment returns `access-control-allow-origin: *`, so the page
+  uses `fetch(url, {credentials: 'omit'})`: no cookies go out, every request is
+  anonymous, and who is signed in stops mattering. A JSONP `<script>` call
+  remains as a fallback.
+- **If the poll ever "stops responding" again**, check the endpoint with
+  `curl -sL '<exec-url>?action=ping&callback=cb'`. curl carries no cookies, so if
+  curl works and the browser doesn't, it is the signed-in account. Use
+  `curl -sL`, never `curl -I` — HEAD returns a misleading 403.
 
 ## How it runs in two parts
 
