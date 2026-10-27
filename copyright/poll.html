@@ -171,7 +171,18 @@ function jsonp(action, extra, cb, onerr){
 }
 
 function showOffline(why){
-  document.getElementById('offlinewhy').textContent = why ? '(' + why + ')' : '';
+  var hint = '';
+  if (/\/a\/macros\//.test(ENDPOINT)) {
+    hint = ' The script was deployed from a school account, so it is domain-locked and students cannot reach it. Redeploy it from a personal Google account — the working URL has no "/a/macros/<domain>/" in it.';
+  } else if (!ENDPOINT) {
+    hint = ' No script URL has been set in this page yet.';
+  } else {
+    hint = ' Check it directly: ' +
+      '<a target="_blank" rel="noopener" href="' + ENDPOINT + '?action=ping&callback=cb">open the script URL</a>. ' +
+      'If that shows cb({"ok":true...}) the script is fine and this page is cached — reload with Shift held. ' +
+      'If it shows a Google sign-in or account chooser, try an incognito window; being signed into two Google accounts can break it.';
+  }
+  document.getElementById('offlinewhy').innerHTML = (why ? '(' + why + ')' : '') + hint;
   document.getElementById('offline').hidden = false;
 }
 
