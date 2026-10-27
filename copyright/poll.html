@@ -151,22 +151,66 @@ var MODE    = params.get('view') || 'vote';     // vote | results | hand
 var ADMINKEY= params.get('key') || '';
 var answers = {has:{}, ok:{}};
 
-/* ---------- JSONP: Apps Script can't do CORS, a script tag can ---------- */
+/* ------------------------------------------------------------------ *
+ * Talking to the Apps Script.
+ *
+ * A <script> tag sends the browser's Google cookies. If the person is
+ * signed into a Google account that cannot see the script — a school
+ * account, say, when the script belongs to a personal one — Google
+ * answers with an error page instead of the script, and the poll looks
+ * dead for no visible reason.
+ *
+ * The deployment returns access-control-allow-origin:*, so fetch() with
+ * credentials omitted works and sends no cookies at all. Every request is
+ * anonymous, and who is signed in stops mattering. JSONP stays as a
+ * fallback for browsers where fetch is unavailable or blocked.
+ * ------------------------------------------------------------------ */
+function buildUrl(action, extra, callbackName){
+  var url = ENDPOINT + '?action=' + encodeURIComponent(action) + '&callback=' + callbackName;
+  for (var k in extra) if (extra[k] !== undefined && extra[k] !== null)
+    url += '&' + encodeURIComponent(k) + '=' + encodeURIComponent(extra[k]);
+  return url;
+}
+
+// The script always wraps its JSON in cb(...); strip that to get at the JSON.
+function unwrap(text){
+  var m = String(text).match(/^[^(]*\(([\s\S]*)\);?\s*$/);
+  return JSON.parse(m ? m[1] : text);
+}
+
 var jsonpSeq = 0;
 function jsonp(action, extra, cb, onerr){
   if (!ENDPOINT) { onerr && onerr('no endpoint configured'); return; }
-  var name = '__poll_cb_' + (++jsonpSeq);
-  var url = ENDPOINT + '?action=' + encodeURIComponent(action) + '&callback=' + name;
-  for (var k in extra) if (extra[k] !== undefined && extra[k] !== null)
-    url += '&' + encodeURIComponent(k) + '=' + encodeURIComponent(extra[k]);
 
+  if (window.fetch) {
+    var ctrl = window.AbortController ? new AbortController() : null;
+    var killer = setTimeout(function(){ ctrl && ctrl.abort(); }, 15000);
+    fetch(buildUrl(action, extra, 'cb'), {
+      method: 'GET',
+      credentials: 'omit',          // the whole point: no Google cookies
+      mode: 'cors',
+      signal: ctrl ? ctrl.signal : undefined
+    })
+      .then(function(r){
+        if (!r.ok) throw new Error('http ' + r.status);
+        return r.text();
+      })
+      .then(function(t){ clearTimeout(killer); cb(unwrap(t)); })
+      .catch(function(){ clearTimeout(killer); jsonpTag(action, extra, cb, onerr); });
+    return;
+  }
+  jsonpTag(action, extra, cb, onerr);
+}
+
+function jsonpTag(action, extra, cb, onerr){
+  var name = '__poll_cb_' + (++jsonpSeq);
   var s = document.createElement('script');
   var timer = setTimeout(function(){ cleanup(); onerr && onerr('timed out'); }, 12000);
   function cleanup(){ clearTimeout(timer); delete window[name]; if (s.parentNode) s.parentNode.removeChild(s); }
 
   window[name] = function(data){ cleanup(); cb(data); };
   s.onerror = function(){ cleanup(); onerr && onerr('could not reach the script'); };
-  s.src = url;
+  s.src = buildUrl(action, extra, name);
   document.head.appendChild(s);
 }
 
