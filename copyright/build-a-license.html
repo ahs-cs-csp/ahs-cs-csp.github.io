@@ -1,0 +1,284 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Build a License</title>
+<style>
+:root{
+  --bg:#eef0f3; --panel:#fff; --ink:#18212b; --ink-soft:#5b6674; --rule:#d5dae1; --accent:#2f6fde;
+  --good:#1f7a4d; --good-bg:#e6f4ec; --bad:#b3261e; --bad-bg:#fbeae9; --warn:#8a5a00; --warn-bg:#fdf3e2;
+  --ui:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){:root{
+  --bg:#12171d; --panel:#1b232c; --ink:#e9edf2; --ink-soft:#9aa5b3; --rule:#2f3a47; --accent:#6ea0ff;
+  --good:#6ddc9f; --good-bg:#15301f; --bad:#ff9b93; --bad-bg:#3a1b19; --warn:#f0c173; --warn-bg:#352a14;
+  color-scheme:dark;
+}}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--ui);line-height:1.55;padding:40px 16px 56px}
+.wrap{max-width:760px;margin:0 auto;display:flex;flex-direction:column;gap:26px}
+h1{font-size:1.6rem;margin:0}
+.sub{color:var(--ink-soft);margin:6px 0 0}
+h2{font-size:.78rem;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-soft);margin:0 0 12px;font-family:var(--mono)}
+.panel{background:var(--panel);border:1px solid var(--rule);border-radius:8px;padding:18px 20px}
+button{font:inherit;font-size:.92rem;padding:9px 14px;border-radius:7px;border:1px solid var(--rule);
+  background:var(--panel);color:var(--ink);cursor:pointer}
+button:hover{border-color:var(--accent)}
+button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+button[disabled]{cursor:default;opacity:.5}
+.note{font-size:.88rem;color:var(--ink-soft)}
+a{color:var(--accent)}
+
+/* timeline */
+.tl{position:relative;margin:0;padding:0 0 0 26px;list-style:none;border-left:2px solid var(--rule)}
+.tl li{position:relative;padding:0 0 18px}
+.tl li:last-child{padding-bottom:0}
+.tl li::before{content:'';position:absolute;left:-33px;top:5px;width:12px;height:12px;border-radius:50%;
+  background:var(--accent);border:2px solid var(--panel)}
+.tl .yr{font-family:var(--mono);font-size:.78rem;color:var(--accent);font-weight:700}
+.tl .ev{font-weight:600;margin:1px 0 0}
+.tl .why{font-size:.9rem;color:var(--ink-soft);margin:3px 0 0}
+.turn{background:var(--warn-bg);border:1px solid var(--warn);border-radius:7px;padding:12px 14px;margin-top:16px}
+
+/* builder */
+.toggles{display:flex;gap:9px;flex-wrap:wrap;margin:0 0 16px}
+.tog{display:flex;flex-direction:column;align-items:center;gap:2px;padding:11px 15px;border-radius:8px;
+  border:1px solid var(--rule);background:var(--bg);cursor:pointer;min-width:84px}
+.tog .code{font-family:var(--mono);font-weight:700;font-size:1rem}
+.tog .cap{font-size:.74rem;color:var(--ink-soft)}
+.tog.on{border-color:var(--accent);background:var(--accent);color:#fff}
+.tog.on .cap{color:#fff}
+.tog.locked{opacity:.95;cursor:default;border-color:var(--accent);background:var(--accent);color:#fff}
+.tog.locked .cap{color:#fff}
+.tog.off{opacity:.38;cursor:not-allowed}
+.result{border:1px solid var(--rule);border-radius:7px;padding:14px 16px;background:var(--bg)}
+.lic{font-family:var(--mono);font-size:1.15rem;font-weight:700;margin:0}
+.licname{color:var(--ink-soft);font-size:.9rem;margin:2px 0 10px}
+ul.perm{margin:0;padding-left:18px}
+ul.perm li{margin:4px 0;font-size:.93rem}
+.yes::marker{content:'\2713  '} .no::marker{content:'\2717  '}
+li.yes{color:var(--good)} li.no{color:var(--bad)}
+.conflict{background:var(--bad-bg);border:1px solid var(--bad);border-radius:7px;padding:11px 13px;margin-top:12px;font-size:.9rem}
+
+/* scenarios */
+.sc{border-bottom:1px solid var(--rule);padding:14px 0}
+.sc:last-of-type{border-bottom:0}
+.scq{font-weight:500;margin:0 0 10px}
+.opts{display:flex;gap:7px;flex-wrap:wrap}
+.opts button{font-family:var(--mono);font-size:.85rem}
+.opts button.right{background:var(--good-bg);border-color:var(--good);color:var(--good);font-weight:700}
+.opts button.wrong{background:var(--bad-bg);border-color:var(--bad);color:var(--bad)}
+.scwhy{margin:10px 0 0;font-size:.9rem;color:var(--ink-soft)}
+.three{display:grid;gap:12px}
+@media(min-width:620px){.three{grid-template-columns:1fr 1fr 1fr}}
+.card3{border:1px solid var(--rule);border-radius:7px;padding:12px 14px;background:var(--bg)}
+.card3 h3{margin:0 0 5px;font-size:.95rem}
+.card3 p{margin:0;font-size:.88rem;color:var(--ink-soft)}
+footer{font-size:.82rem;color:var(--ink-soft);border-top:1px solid var(--rule);padding-top:14px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <h1>Build a License</h1>
+    <p class="sub">Unit 2 Lab 5. Copyright is automatic and it says <em>no</em> by default. Creative Commons exists so you can say yes on your own terms — here is where it came from, and how to build one.</p>
+  </header>
+
+  <section class="panel">
+    <h2>How we got here</h2>
+    <ol class="tl">
+      <li><span class="yr">1998</span>
+        <p class="ev">Congress extends copyright by 20 years</p>
+        <p class="why">The Sonny Bono Copyright Term Extension Act pushes terms to life of the author plus 70 years. For the next two decades, essentially <strong>nothing new enters the public domain</strong>.</p></li>
+      <li><span class="yr">1999</span>
+        <p class="ev">Eric Eldred sues</p>
+        <p class="why">Eldred put public-domain books online for free. The extension froze his supply of new material. A law professor named Lawrence Lessig takes the case.</p></li>
+      <li><span class="yr">2001</span>
+        <p class="ev">Creative Commons is founded</p>
+        <p class="why">Lessig, Hal Abelson and Eldred start it while the case is still running. Abelson co-wrote <em>Structure and Interpretation of Computer Programs</em> — the book Berkeley's Brian Harvey taught from, and BJC, this course, descends from that line.</p></li>
+      <li><span class="yr">Dec 2002</span>
+        <p class="ev">The first CC licenses are published</p>
+        <p class="why">Not a change to the law. A set of ready-made permissions an author can attach to their own work, written so a human, a lawyer and a computer can all read them.</p></li>
+      <li><span class="yr">Jan 2003</span>
+        <p class="ev">Eldred loses, 7&ndash;2</p>
+        <p class="why">The Supreme Court says Congress may set terms however it likes, so long as they are not literally forever. Justices Stevens and Breyer dissent. The extension stands.</p></li>
+      <li><span class="yr">Jan 2003</span>
+        <p class="ev">Cory Doctorow gives his novel away on the day it goes on sale</p>
+        <p class="why"><em>Down and Out in the Magic Kingdom</em> is published and simultaneously released as a free CC download — the first novel to do it. It sold well. His argument: for a new writer the problem is not piracy, it is obscurity.</p></li>
+      <li><span class="yr">2009</span>
+        <p class="ev">Wikipedia relicenses to CC BY-SA</p>
+        <p class="why">The largest reference work ever made runs on one of these licenses.</p></li>
+      <li><span class="yr">Today</span>
+        <p class="ev">BJC is CC BY-NC-SA</p>
+        <p class="why">The curriculum open in your other tab right now. Someone chose those letters on purpose. By the end of this page you will know exactly what they chose.</p></li>
+    </ol>
+    <div class="turn">
+      <strong>The part worth noticing:</strong> they lost. The law did not change. So instead of fighting it, they built a tool that works <em>inside</em> copyright — using an author's own exclusive rights to hand permission away in advance.
+    </div>
+  </section>
+
+  <section class="panel">
+    <h2>Build one</h2>
+    <p class="note" style="margin:0 0 14px">You wrote something. Decide what other people may do with it.</p>
+    <div class="toggles">
+      <button class="tog locked" id="t-by" type="button" aria-pressed="true">
+        <span class="code">BY</span><span class="cap">credit me</span></button>
+      <button class="tog" id="t-nc" type="button" aria-pressed="false">
+        <span class="code">NC</span><span class="cap">no commercial</span></button>
+      <button class="tog" id="t-sa" type="button" aria-pressed="false">
+        <span class="code">SA</span><span class="cap">share alike</span></button>
+      <button class="tog" id="t-nd" type="button" aria-pressed="false">
+        <span class="code">ND</span><span class="cap">no remixing</span></button>
+    </div>
+    <p class="note" style="margin:-6px 0 14px">BY cannot be switched off. Every Creative Commons license requires credit — that is the one thing you never give up.</p>
+    <div class="result" id="licout"></div>
+    <div class="conflict" id="conflict" hidden></div>
+  </section>
+
+  <section class="panel">
+    <h2>Pick the license</h2>
+    <p class="note" style="margin:0 0 6px">Six combinations are legal. Which fits?</p>
+    <div id="scenarios"></div>
+    <p class="note" id="scscore" style="margin:14px 0 0"></p>
+  </section>
+
+  <section class="panel">
+    <h2>Three things people mix up</h2>
+    <div class="three">
+      <div class="card3"><h3>Free software</h3><p>About <strong>liberty</strong>. You may run, read, change and pass on the code. The Free Software Foundation's position is ethical: users deserve this control.</p></div>
+      <div class="card3"><h3>Open source</h3><p>Same licenses, different pitch. Framed as <strong>better engineering</strong> — more eyes, faster fixes, lower cost. Coined in 1998 to sell the idea to companies.</p></div>
+      <div class="card3"><h3>Open access</h3><p>Not software at all. <strong>Research papers</strong> readable without a subscription — the work is usually publicly funded, so the public can read it.</p></div>
+    </div>
+    <p class="note" style="margin:14px 0 0">&ldquo;Free&rdquo; here means free as in speech, not free as in pizza. Free software can be sold; open-source code can sit inside a product you pay for.</p>
+  </section>
+
+  <section class="panel">
+    <h2>In your pair doc</h2>
+    <ul class="perm" style="padding-left:18px">
+      <li>BJC chose <strong>CC BY-NC-SA</strong> for this course. Explain each of the three parts, and say why a curriculum would want NC.</li>
+      <li>Creative Commons was built after losing in court. What could it do that winning the case would not have?</li>
+      <li>Doctorow gave away the book and still sold copies. What is his argument, and do you buy it?</li>
+      <li>Which license would <em>you</em> put on your Create Task, and what does that choice let other people do?</li>
+    </ul>
+  </section>
+
+  <footer>Albany High School &middot; CS Principles &middot; <a href="../index.html">All pages</a></footer>
+</div>
+
+<script>
+var state = {nc:false, sa:false, nd:false};
+
+var LICENSES = {
+  'BY':          'Attribution',
+  'BY-SA':       'Attribution-ShareAlike',
+  'BY-ND':       'Attribution-NoDerivatives',
+  'BY-NC':       'Attribution-NonCommercial',
+  'BY-NC-SA':    'Attribution-NonCommercial-ShareAlike',
+  'BY-NC-ND':    'Attribution-NonCommercial-NoDerivatives'
+};
+
+function code(){
+  var p = ['BY'];
+  if (state.nc) p.push('NC');
+  if (state.sa) p.push('SA');
+  if (state.nd) p.push('ND');
+  return p.join('-');
+}
+
+function paint(){
+  ['nc','sa','nd'].forEach(function(k){
+    var el = document.getElementById('t-' + k);
+    el.classList.toggle('on', state[k]);
+    el.setAttribute('aria-pressed', String(state[k]));
+    // SA and ND contradict each other, so the unchosen one greys out.
+    var blocked = (k === 'sa' && state.nd) || (k === 'nd' && state.sa);
+    el.classList.toggle('off', blocked && !state[k]);
+  });
+
+  var c = code();
+  var out = document.getElementById('licout');
+  var conflictBox = document.getElementById('conflict');
+
+  if (state.sa && state.nd) {
+    conflictBox.hidden = false;
+    conflictBox.innerHTML = '<strong>That combination does not exist.</strong> ShareAlike is a rule about ' +
+      'how you must license your changes. NoDerivatives says you may not make changes at all. ' +
+      'One governs remixes, the other forbids them, so CC never issued SA+ND. There are six licenses, not eight.';
+    out.innerHTML = '<p class="lic">&mdash;</p><p class="licname">no such license</p>';
+    return;
+  }
+  conflictBox.hidden = true;
+
+  var perms = [
+    {ok:true,  t:'Share it, copy it, post it anywhere'},
+    {ok:!state.nd, t:state.nd ? 'Remix it, translate it, build on it' : 'Remix it, translate it, build on it'},
+    {ok:!state.nc, t:state.nc ? 'Use it to make money' : 'Use it to make money'},
+    {ok:true,  t:'Must credit you by name'},
+  ];
+  if (state.sa) perms.push({ok:true, t:'Any changes must carry this same license'});
+
+  out.innerHTML =
+    '<p class="lic">CC ' + c + '</p>' +
+    '<p class="licname">' + LICENSES[c] + '</p>' +
+    '<ul class="perm">' + perms.map(function(p){
+      return '<li class="' + (p.ok ? 'yes' : 'no') + '">' + p.t + '</li>';
+    }).join('') + '</ul>';
+}
+
+['nc','sa','nd'].forEach(function(k){
+  document.getElementById('t-' + k).addEventListener('click', function(){
+    state[k] = !state[k];
+    paint();
+  });
+});
+paint();
+
+/* ---------- scenarios ---------- */
+var SCEN = [
+  {q:'You wrote a song. Anyone may use it however they like, including in an advert, as long as your name is on it.',
+   a:'BY', why:'Nothing restricted beyond credit. The most permissive CC license there is.'},
+  {q:'You built a set of CS worksheets. Teachers may adapt them freely, but you do not want a company selling them, and any adapted version must stay as open as yours.',
+   a:'BY-NC-SA', why:'NC blocks the company, SA forces adaptations to stay open. This is exactly what BJC chose, and why.'},
+  {q:'You wrote an essay taking a strong position. People may republish it anywhere, but you do not want anyone editing your argument into something you did not say.',
+   a:'BY-ND', why:'ND keeps the text intact. Note it is still free to share commercially — ND restricts changing, not selling.'},
+  {q:'You made a photo library for other artists to remix. Commercial use is fine. You just want every remix kept open for the next person.',
+   a:'BY-SA', why:'SA is the viral one: openness propagates to everything built on it. Wikipedia runs on this.'},
+  {q:'You recorded a lecture series. Schools may use and adapt it; companies may not touch it.',
+   a:'BY-NC', why:'NC alone. Adaptation is fine and adapters may license their version however they want.'}
+];
+
+var scHost = document.getElementById('scenarios'), scDone = 0, scRight = 0;
+SCEN.forEach(function(s, i){
+  var d = document.createElement('div');
+  d.className = 'sc';
+  d.innerHTML = '<p class="scq">' + (i+1) + '. ' + s.q + '</p><div class="opts"></div><p class="scwhy" hidden></p>';
+  var opts = d.querySelector('.opts'), why = d.querySelector('.scwhy');
+  Object.keys(LICENSES).forEach(function(k){
+    var b = document.createElement('button');
+    b.type = 'button'; b.textContent = 'CC ' + k;
+    b.addEventListener('click', function(){
+      if (why.hidden === false) return;
+      var ok = (k === s.a);
+      b.classList.add(ok ? 'right' : 'wrong');
+      if (!ok) opts.querySelectorAll('button').forEach(function(x){
+        if (x.textContent === 'CC ' + s.a) x.classList.add('right');
+      });
+      opts.querySelectorAll('button').forEach(function(x){ x.disabled = true; });
+      why.textContent = (ok ? '' : 'Answer: CC ' + s.a + '. ') + s.why;
+      why.hidden = false;
+      scDone++; if (ok) scRight++;
+      document.getElementById('scscore').textContent = scRight + ' of ' + scDone + ' right.';
+    });
+    opts.appendChild(b);
+  });
+  scHost.appendChild(d);
+});
+</script>
+</body>
+</html>
