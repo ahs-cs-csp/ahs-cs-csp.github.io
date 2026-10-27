@@ -1,4 +1,4 @@
-# Station A live poll — setup
+# Part 1 live poll — setup
 
 Ten minutes, once. Do it from your **personal** Google account — school Workspace
 accounts usually refuse to publish a web app with "Anyone" access, which is what

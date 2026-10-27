@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Copyright &amp; Fair Use</title>
+<style>
+:root{
+  --bg:#eef0f3; --panel:#fff; --ink:#18212b; --ink-soft:#5b6674; --rule:#d5dae1; --accent:#2f6fde;
+  --warn:#8a5a00; --warn-bg:#fdf3e2;
+  --ui:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){:root{
+  --bg:#12171d; --panel:#1b232c; --ink:#e9edf2; --ink-soft:#9aa5b3; --rule:#2f3a47; --accent:#6ea0ff;
+  --warn:#f0c173; --warn-bg:#352a14; color-scheme:dark;
+}}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--ui);line-height:1.55;padding:40px 16px 56px}
+.wrap{max-width:720px;margin:0 auto;display:flex;flex-direction:column;gap:24px}
+h1{font-size:1.6rem;margin:0}
+.sub{color:var(--ink-soft);margin:6px 0 0}
+h2{font-size:.78rem;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-soft);margin:0 0 12px;font-family:var(--mono)}
+.panel{background:var(--panel);border:1px solid var(--rule);border-radius:8px;padding:18px 20px}
+.note{font-size:.88rem;color:var(--ink-soft)}
+a{color:var(--accent)}
+
+.steps{display:flex;flex-direction:column;gap:12px;counter-reset:s}
+a.step{display:flex;gap:14px;align-items:flex-start;text-decoration:none;color:inherit;background:var(--panel);
+  border:1px solid var(--rule);border-left:4px solid var(--accent);border-radius:8px;padding:15px 17px}
+a.step:hover{border-color:var(--accent)}
+a.step:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.num{counter-increment:s;flex:0 0 auto;width:28px;height:28px;border-radius:50%;background:var(--accent);color:#fff;
+  font-weight:700;font-size:.85rem;display:grid;place-items:center;margin-top:1px;font-family:var(--mono)}
+.num::before{content:counter(s)}
+.body{flex:1}
+.name{font-weight:600;display:block}
+.what{font-size:.9rem;color:var(--ink-soft);display:block;margin-top:2px}
+.how{font-size:.84rem;color:var(--accent);display:block;margin-top:5px;font-family:var(--mono)}
+
+.docs{display:flex;flex-direction:column;gap:10px}
+a.doc{display:block;text-decoration:none;color:inherit;background:var(--bg);border:1px solid var(--rule);
+  border-radius:7px;padding:13px 15px}
+a.doc:hover{border-color:var(--accent)}
+a.doc .name{font-weight:600}
+a.doc .what{color:var(--ink-soft)}
+.todo{background:var(--warn-bg);border:1px solid var(--warn);border-radius:7px;padding:12px 14px;font-size:.9rem}
+footer{font-size:.82rem;color:var(--ink-soft);border-top:1px solid var(--rule);padding-top:14px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <h1>Copyright &amp; Fair Use</h1>
+    <p class="sub">Unit 2, Lab 5. Work through these in order with your partner. Everything you need is on this page.</p>
+  </header>
+
+  <section class="panel">
+    <h2>Before you start</h2>
+    <p style="margin:0 0 8px">Open your <strong>pair working doc</strong> — one per pair — and keep it beside these pages. You will be asked to write in it as you go, not at the end.</p>
+    <p class="note" style="margin:0">Part 1 is the exception: do it <strong>on your own device, by yourself</strong>. It is a survey, and it only works if nobody is looking over your shoulder.</p>
+  </section>
+
+  <section>
+    <h2>The five parts</h2>
+    <div class="steps">
+
+      <a class="step" href="poll.html">
+        <span class="num"></span>
+        <span class="body">
+          <span class="name">Would You? Should You?</span>
+          <span class="what">Two short sets of questions about what you actually do and what you think should be allowed. Answer honestly — it is anonymous.</span>
+          <span class="how">on your own &middot; ~15 min</span>
+        </span>
+      </a>
+
+      <a class="step" href="fair-use-court.html">
+        <span class="num"></span>
+        <span class="body">
+          <span class="name">Fair Use Court</span>
+          <span class="what">Nine real cases, from 2 Live Crew to the AI lawsuits. Agree on a verdict with your partner before you reveal what the court said.</span>
+          <span class="how">in pairs &middot; ~25 min</span>
+        </span>
+      </a>
+
+      <a class="step" href="build-a-license.html">
+        <span class="num"></span>
+        <span class="body">
+          <span class="name">Build a License</span>
+          <span class="what">Where Creative Commons came from, and why it was built after losing in court. Then make your own license and see exactly what you gave away.</span>
+          <span class="how">in pairs &middot; ~17 min</span>
+        </span>
+      </a>
+
+      <a class="step" href="copyright-clock.html">
+        <span class="num"></span>
+        <span class="body">
+          <span class="name">Copyright Clock</span>
+          <span class="what">Copyright is supposed to expire. Change the rule from 1790 to today and find out when Mickey, Gatsby and your own work go free.</span>
+          <span class="how">in pairs &middot; ~13 min</span>
+        </span>
+      </a>
+
+      <a class="step" href="locked.html">
+        <span class="num"></span>
+        <span class="body">
+          <span class="name">Locked</span>
+          <span class="what">You paid for it, so use it. Five locks say no, and the law says you may not pick them — even though every one of those uses was legal.</span>
+          <span class="how">in pairs &middot; ~18 min</span>
+        </span>
+      </a>
+
+    </div>
+  </section>
+
+  <section class="panel">
+    <h2>What you turn in</h2>
+    <div class="docs">
+      <a class="doc" id="pairdoc" href="#">
+        <span class="name">Pair working doc</span>
+        <span class="what">One per pair. Each part tells you what to write in it.</span>
+      </a>
+      <a class="doc" id="followup" href="#">
+        <span class="name">Follow-up, on your own &middot; 10 points</span>
+        <span class="what">Individual. Do this after the five parts.</span>
+      </a>
+    </div>
+    <p class="todo" style="margin-top:12px" id="linknote">Your teacher will give you the links to these two documents.</p>
+  </section>
+
+  <footer>Albany High School &middot; CS Principles &middot; <a href="../index.html">All pages</a></footer>
+</div>
+</body>
+</html>

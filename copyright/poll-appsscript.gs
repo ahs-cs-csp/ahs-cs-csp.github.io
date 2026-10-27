@@ -1,5 +1,5 @@
 /**
- * Station A live poll backend — AHS CS Principles, Unit 2 Lab 5.
+ * Part 1 live poll backend — AHS CS Principles, Unit 2 Lab 5.
  *
  * Paste this into a Google Sheet's Apps Script editor (Extensions > Apps Script),
  * then deploy as a Web app. Setup steps are in poll-README.md.
