@@ -1,0 +1,348 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Would You? Should You?</title>
+<style>
+:root{
+  --bg:#eef0f3; --panel:#fff; --ink:#18212b; --ink-soft:#5b6674; --rule:#d5dae1; --accent:#2f6fde;
+  --has:#b3261e; --has-bg:#fbeae9; --ok:#1f7a4d; --ok-bg:#e6f4ec; --warn:#8a5a00; --warn-bg:#fdf3e2;
+  --ui:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){:root{
+  --bg:#12171d; --panel:#1b232c; --ink:#e9edf2; --ink-soft:#9aa5b3; --rule:#2f3a47; --accent:#6ea0ff;
+  --has:#ff9b93; --has-bg:#3a1b19; --ok:#6ddc9f; --ok-bg:#15301f; --warn:#f0c173; --warn-bg:#352a14;
+  color-scheme:dark;
+}}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--ui);line-height:1.55;padding:40px 16px 56px}
+.wrap{max-width:720px;margin:0 auto;display:flex;flex-direction:column;gap:24px}
+h1{font-size:1.6rem;margin:0}
+.sub{color:var(--ink-soft);margin:6px 0 0}
+h2{font-size:.78rem;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-soft);margin:0 0 10px;font-family:var(--mono)}
+.panel{background:var(--panel);border:1px solid var(--rule);border-radius:8px;padding:18px 20px}
+.q{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;
+   padding:13px 0;border-bottom:1px solid var(--rule)}
+.q:last-of-type{border-bottom:0}
+.qtext{flex:1 1 300px;font-weight:500}
+.yn{display:flex;gap:8px;flex:0 0 auto}
+button{font:inherit;font-size:.92rem;padding:9px 16px;border-radius:7px;border:1px solid var(--rule);
+  background:var(--panel);color:var(--ink);cursor:pointer}
+button:hover{border-color:var(--accent)}
+button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+button[disabled]{cursor:default;opacity:.5}
+.yn button.on{border-color:var(--accent);background:var(--accent);color:#fff}
+button.primary{background:var(--accent);color:#fff;border-color:var(--accent);font-weight:600}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.msg{border-radius:7px;padding:12px 14px;font-size:.92rem}
+.msg.warn{background:var(--warn-bg);border:1px solid var(--warn)}
+.msg.good{background:var(--ok-bg);border:1px solid var(--ok)}
+.note{font-size:.88rem;color:var(--ink-soft)}
+label.inline{font-size:.9rem;color:var(--ink-soft)}
+select,input[type=text]{font:inherit;padding:7px 9px;border-radius:7px;border:1px solid var(--rule);
+  background:var(--panel);color:var(--ink)}
+
+/* results */
+.pair{margin:0 0 20px}
+.pair:last-child{margin-bottom:0}
+.pairname{font-weight:600;margin:0 0 8px;text-transform:capitalize}
+.bar{display:flex;align-items:center;gap:10px;margin:5px 0}
+.blabel{flex:0 0 190px;font-size:.86rem;color:var(--ink-soft)}
+.track{flex:1;height:26px;background:var(--bg);border:1px solid var(--rule);border-radius:5px;overflow:hidden}
+.fill{height:100%;width:0;transition:width .5s ease;display:flex;align-items:center;justify-content:flex-end;
+  padding-right:7px;color:#fff;font-size:.8rem;font-weight:700;font-family:var(--mono)}
+.fill.has{background:var(--has)} .fill.ok{background:var(--ok)}
+@media (prefers-color-scheme:dark){.fill{color:#12171d}}
+.gap{font-family:var(--mono);font-size:.82rem;color:var(--ink-soft);margin:4px 0 0 200px}
+.big{font-family:var(--mono);font-size:.9rem;color:var(--ink-soft)}
+footer{font-size:.82rem;color:var(--ink-soft);border-top:1px solid var(--rule);padding-top:14px}
+a{color:var(--accent)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <h1>Would You? Should You?</h1>
+    <p class="sub" id="subtitle">Station A &middot; Unit 2 Lab 5. Answer honestly &mdash; nobody can see who voted.</p>
+  </header>
+
+  <!-- ===== connection trouble / fallback notice ===== -->
+  <div class="msg warn" id="offline" hidden>
+    <strong>The live poll is not responding.</strong>
+    <span id="offlinewhy"></span>
+    Run it as a show of hands instead &mdash; <a href="#" id="tohand">switch to hand-count mode</a>.
+  </div>
+
+  <!-- ===== STUDENT: set 1 ===== -->
+  <section class="panel" id="set1">
+    <h2>First set</h2>
+    <div id="q1"></div>
+    <div class="row" style="margin-top:16px">
+      <button class="primary" id="next1" type="button" disabled>Next</button>
+      <span class="note" id="n1">Answer all three.</span>
+    </div>
+  </section>
+
+  <!-- ===== STUDENT: set 2 ===== -->
+  <section class="panel" id="set2" hidden>
+    <h2>Now a different kind of question</h2>
+    <div id="q2"></div>
+    <div class="row" style="margin-top:16px">
+      <button class="primary" id="submit" type="button" disabled>Submit</button>
+      <span class="note" id="n2">Answer all three.</span>
+    </div>
+  </section>
+
+  <!-- ===== STUDENT: done ===== -->
+  <section class="panel" id="done" hidden>
+    <div class="msg good"><strong>Thanks — your answers are in.</strong> Watch the board.</div>
+    <p class="note" style="margin:12px 0 0">Talk with your partner while you wait: did you hesitate on any of these? Which one, and why?</p>
+  </section>
+
+  <!-- ===== RESULTS (teacher / projector) ===== -->
+  <section id="resultsview" hidden>
+    <div class="panel">
+      <div class="row" style="justify-content:space-between;margin-bottom:16px">
+        <h2 style="margin:0">Live results &middot; period <span id="rperiod"></span></h2>
+        <span class="big"><span id="rn">0</span> responses</span>
+      </div>
+      <div id="bars"></div>
+    </div>
+    <p class="note" style="margin-top:14px">The number to talk about is the <strong>gap</strong>. Ask the class what makes the second question different from the first &mdash; and whether the word &ldquo;steal&rdquo; is doing some of the work.</p>
+  </section>
+
+  <!-- ===== HAND-COUNT FALLBACK ===== -->
+  <section id="handview" hidden>
+    <div class="panel">
+      <h2>Hand count</h2>
+      <p class="note" style="margin:0 0 14px">No backend needed. Count hands and tap the arrows; the bars update as you go.</p>
+      <div class="row" style="margin-bottom:14px">
+        <label class="inline">Students in the room <input type="text" id="classsize" value="30" size="4" inputmode="numeric"></label>
+      </div>
+      <div id="handrows"></div>
+    </div>
+  </section>
+
+  <footer>Albany High School &middot; CS Principles &middot; <a href="../index.html">All pages</a></footer>
+</div>
+
+<script>
+/* ------------------------------------------------------------------ *
+ * CONFIG — paste the Apps Script /exec URL here after deploying.
+ * Leave it empty and the page runs in hand-count mode automatically.
+ * ------------------------------------------------------------------ */
+var ENDPOINT = '';
+
+var ITEMS = [
+  {key:'music',  q1:'Do you have music on your phone or computer that you didn’t pay for (or get from a legitimate free source)?', q2:'Is it okay to steal music?'},
+  {key:'movies', q1:'Do you have movies on your phone or computer that you didn’t get legally?',                                      q2:'Is it okay to steal movies?'},
+  {key:'games',  q1:'Do you have games on your phone or computer that you didn’t get legally?',                                       q2:'Is it okay to steal games?'}
+];
+
+var params  = new URLSearchParams(location.search);
+var PERIOD  = params.get('period') || '1';
+var MODE    = params.get('view') || 'vote';     // vote | results | hand
+var ADMINKEY= params.get('key') || '';
+var answers = {has:{}, ok:{}};
+
+/* ---------- JSONP: Apps Script can't do CORS, a script tag can ---------- */
+var jsonpSeq = 0;
+function jsonp(action, extra, cb, onerr){
+  if (!ENDPOINT) { onerr && onerr('no endpoint configured'); return; }
+  var name = '__poll_cb_' + (++jsonpSeq);
+  var url = ENDPOINT + '?action=' + encodeURIComponent(action) + '&callback=' + name;
+  for (var k in extra) if (extra[k] !== undefined && extra[k] !== null)
+    url += '&' + encodeURIComponent(k) + '=' + encodeURIComponent(extra[k]);
+
+  var s = document.createElement('script');
+  var timer = setTimeout(function(){ cleanup(); onerr && onerr('timed out'); }, 12000);
+  function cleanup(){ clearTimeout(timer); delete window[name]; if (s.parentNode) s.parentNode.removeChild(s); }
+
+  window[name] = function(data){ cleanup(); cb(data); };
+  s.onerror = function(){ cleanup(); onerr && onerr('could not reach the script'); };
+  s.src = url;
+  document.head.appendChild(s);
+}
+
+function showOffline(why){
+  document.getElementById('offlinewhy').textContent = why ? '(' + why + ')' : '';
+  document.getElementById('offline').hidden = false;
+}
+
+/* ---------- student voting ---------- */
+function buildQuestions(container, items, which, onChange){
+  container.innerHTML = '';
+  items.forEach(function(it){
+    var row = document.createElement('div');
+    row.className = 'q';
+    row.innerHTML = '<span class="qtext">' + (which === 'has' ? it.q1 : it.q2) + '</span>' +
+                    '<span class="yn"><button type="button" data-v="1">Yes</button>' +
+                    '<button type="button" data-v="0">No</button></span>';
+    row.querySelectorAll('button').forEach(function(b){
+      b.addEventListener('click', function(){
+        row.querySelectorAll('button').forEach(function(x){ x.classList.remove('on'); });
+        b.classList.add('on');
+        answers[which][it.key] = b.dataset.v;
+        onChange();
+      });
+    });
+    container.appendChild(row);
+  });
+}
+
+function allAnswered(which){ return ITEMS.every(function(i){ return answers[which][i.key] !== undefined; }); }
+
+function initVote(){
+  if (localStorage.getItem('poll-voted-' + PERIOD)) { showDone(); return; }
+
+  buildQuestions(document.getElementById('q1'), ITEMS, 'has', function(){
+    document.getElementById('next1').disabled = !allAnswered('has');
+    if (allAnswered('has')) document.getElementById('n1').textContent = '';
+  });
+  buildQuestions(document.getElementById('q2'), ITEMS, 'ok', function(){
+    document.getElementById('submit').disabled = !allAnswered('ok');
+    if (allAnswered('ok')) document.getElementById('n2').textContent = '';
+  });
+
+  document.getElementById('next1').addEventListener('click', function(){
+    document.getElementById('set1').hidden = true;
+    document.getElementById('set2').hidden = false;
+    document.getElementById('set2').scrollIntoView({behavior:'smooth', block:'start'});
+  });
+
+  document.getElementById('submit').addEventListener('click', function(){
+    var btn = this; btn.disabled = true; btn.textContent = 'Sending…';
+    var payload = {period: PERIOD};
+    ITEMS.forEach(function(i){
+      payload['has_' + i.key] = answers.has[i.key];
+      payload['ok_'  + i.key] = answers.ok[i.key];
+    });
+    jsonp('vote', payload, function(res){
+      if (res && res.ok) { try { localStorage.setItem('poll-voted-' + PERIOD, '1'); } catch(e){} showDone(); }
+      else { btn.disabled = false; btn.textContent = 'Submit'; showOffline(res && res.error); }
+    }, function(err){ btn.disabled = false; btn.textContent = 'Submit'; showOffline(err); });
+  });
+}
+
+function showDone(){
+  ['set1','set2'].forEach(function(id){ document.getElementById(id).hidden = true; });
+  document.getElementById('done').hidden = false;
+}
+
+/* ---------- results ---------- */
+function initResults(){
+  document.getElementById('subtitle').textContent = 'Live class results. Keep this on the projector.';
+  document.getElementById('rperiod').textContent = PERIOD;
+  document.getElementById('resultsview').hidden = false;
+  renderBars({n:0, has:{music:0,movies:0,games:0}, ok:{music:0,movies:0,games:0}});
+
+  if (ADMINKEY) {
+    var p = document.createElement('p');
+    p.className = 'row'; p.style.marginTop = '14px';
+    p.innerHTML = '<button type="button" id="resetbtn">Clear period ' + PERIOD + '</button>' +
+                  '<span class="note">Do this between periods.</span>';
+    document.getElementById('resultsview').appendChild(p);
+    document.getElementById('resetbtn').addEventListener('click', function(){
+      if (!confirm('Delete every response for period ' + PERIOD + '?')) return;
+      jsonp('reset', {period: PERIOD, key: ADMINKEY}, function(r){
+        alert(r && r.ok ? 'Cleared ' + r.cleared + ' responses.' : 'Failed: ' + (r && r.error));
+        poll();
+      }, function(e){ alert('Failed: ' + e); });
+    });
+  }
+
+  poll();
+  setInterval(poll, 5000);
+}
+
+function poll(){
+  jsonp('results', {period: PERIOD}, function(res){
+    if (res && res.ok) { document.getElementById('offline').hidden = true; renderBars(res.counts); }
+    else showOffline(res && res.error);
+  }, function(err){ showOffline(err); });
+}
+
+function renderBars(c){
+  document.getElementById('rn').textContent = c.n;
+  var host = document.getElementById('bars');
+  host.innerHTML = '';
+  ITEMS.forEach(function(it){
+    var hasN = c.has[it.key] || 0, okN = c.ok[it.key] || 0;
+    var hasP = c.n ? Math.round(hasN / c.n * 100) : 0;
+    var okP  = c.n ? Math.round(okN  / c.n * 100) : 0;
+    var d = document.createElement('div');
+    d.className = 'pair';
+    d.innerHTML =
+      '<p class="pairname">' + it.key + '</p>' +
+      '<div class="bar"><span class="blabel">Have it unpaid for</span>' +
+        '<span class="track"><span class="fill has" style="width:' + hasP + '%">' + (hasP > 8 ? hasP + '%' : '') + '</span></span></div>' +
+      '<div class="bar"><span class="blabel">Say it’s okay to steal</span>' +
+        '<span class="track"><span class="fill ok" style="width:' + okP + '%">' + (okP > 8 ? okP + '%' : '') + '</span></span></div>' +
+      '<p class="gap">gap: ' + Math.abs(hasP - okP) + ' points</p>';
+    host.appendChild(d);
+  });
+}
+
+/* ---------- hand-count fallback ---------- */
+function initHand(){
+  document.getElementById('subtitle').textContent = 'Hand-count mode. No internet needed.';
+  ['set1','set2','resultsview','done'].forEach(function(id){ document.getElementById(id).hidden = true; });
+  document.getElementById('handview').hidden = false;
+
+  var counts = {has:{music:0,movies:0,games:0}, ok:{music:0,movies:0,games:0}};
+  var host = document.getElementById('handrows');
+
+  function draw(){
+    var size = Math.max(1, parseInt(document.getElementById('classsize').value, 10) || 30);
+    host.innerHTML = '';
+    ITEMS.forEach(function(it){
+      ['has','ok'].forEach(function(which){
+        var n = counts[which][it.key];
+        var pct = Math.round(n / size * 100);
+        var row = document.createElement('div');
+        row.className = 'bar';
+        row.innerHTML =
+          '<span class="blabel">' + it.key + ' &mdash; ' + (which === 'has' ? 'have it' : 'okay to steal') + '</span>' +
+          '<span class="track"><span class="fill ' + which + '" style="width:' + pct + '%">' + (pct > 8 ? pct + '%' : '') + '</span></span>' +
+          '<button type="button" data-d="-1">&minus;</button>' +
+          '<span class="big" style="min-width:2.5em;text-align:center">' + n + '</span>' +
+          '<button type="button" data-d="1">+</button>';
+        row.querySelectorAll('button').forEach(function(b){
+          b.addEventListener('click', function(){
+            counts[which][it.key] = Math.max(0, counts[which][it.key] + (+b.dataset.d));
+            draw();
+          });
+        });
+        host.appendChild(row);
+      });
+    });
+  }
+  document.getElementById('classsize').addEventListener('input', draw);
+  draw();
+}
+
+/* ---------- boot ---------- */
+document.getElementById('tohand').addEventListener('click', function(e){
+  e.preventDefault();
+  document.getElementById('offline').hidden = true;
+  initHand();
+});
+
+if (MODE === 'hand' || !ENDPOINT) {
+  if (MODE === 'results' && !ENDPOINT) { showOffline('no endpoint configured yet'); initHand(); }
+  else initHand();
+} else if (MODE === 'results') {
+  initResults();
+} else {
+  initVote();
+  jsonp('ping', {}, function(){}, function(err){ showOffline(err); });
+}
+</script>
+</body>
+</html>
