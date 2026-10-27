@@ -81,7 +81,7 @@ a{color:var(--accent)}
 
   <!-- ===== STUDENT: set 1 ===== -->
   <section class="panel" id="set1">
-    <h2>First set</h2>
+    <h2>Part 1 of 2</h2>
     <div id="q1"></div>
     <div class="row" style="margin-top:16px">
       <button class="primary" id="next1" type="button" disabled>Next</button>
@@ -91,7 +91,7 @@ a{color:var(--accent)}
 
   <!-- ===== STUDENT: set 2 ===== -->
   <section class="panel" id="set2" hidden>
-    <h2>Now a different kind of question</h2>
+    <h2>Part 2 of 2 &mdash; a different kind of question</h2>
     <div id="q2"></div>
     <div class="row" style="margin-top:16px">
       <button class="primary" id="submit" type="button" disabled>Submit</button>
@@ -110,7 +110,7 @@ a{color:var(--accent)}
     <div class="panel">
       <div class="row" style="justify-content:space-between;margin-bottom:16px">
         <h2 style="margin:0">Live results &middot; period <span id="rperiod"></span></h2>
-        <span class="big"><span id="rn">0</span> responses</span>
+        <span class="big"><span id="rn">0</span> <span id="rnlabel">answered part 1</span></span>
       </div>
       <div id="bars"></div>
     </div>
@@ -253,8 +253,34 @@ function buildQuestions(container, items, which, onChange){
 
 function allAnswered(which){ return ITEMS.every(function(i){ return answers[which][i.key] !== undefined; }); }
 
+function flag(stage){ return 'poll-p' + PERIOD + '-s' + stage; }
+function sent(stage){ try { return !!localStorage.getItem(flag(stage)); } catch(e){ return false; } }
+function markSent(stage){ try { localStorage.setItem(flag(stage), '1'); } catch(e){} }
+
+/* Each half is sent as it is finished, so the first three answers are on the
+   board before anyone is asked whether stealing is okay. That ordering is the
+   whole point of the station, and it only works if part 1 is already counted. */
+function sendStage(stage, btn, label, onDone){
+  btn.disabled = true; btn.textContent = 'Sending…';
+  var payload = {period: PERIOD, stage: String(stage)};
+  ITEMS.forEach(function(i){
+    if (stage === 1) payload['has_' + i.key] = answers.has[i.key];
+    else             payload['ok_'  + i.key] = answers.ok[i.key];
+  });
+  jsonp('vote', payload, function(res){
+    if (res && res.ok) { markSent(stage); btn.textContent = label; onDone(); }
+    else { btn.disabled = false; btn.textContent = label; showOffline(res && res.error); }
+  }, function(err){ btn.disabled = false; btn.textContent = label; showOffline(err); });
+}
+
+function toSet2(){
+  document.getElementById('set1').hidden = true;
+  document.getElementById('set2').hidden = false;
+  document.getElementById('set2').scrollIntoView({behavior:'smooth', block:'start'});
+}
+
 function initVote(){
-  if (localStorage.getItem('poll-voted-' + PERIOD)) { showDone(); return; }
+  if (sent(2)) { showDone(); return; }
 
   buildQuestions(document.getElementById('q1'), ITEMS, 'has', function(){
     document.getElementById('next1').disabled = !allAnswered('has');
@@ -265,23 +291,16 @@ function initVote(){
     if (allAnswered('ok')) document.getElementById('n2').textContent = '';
   });
 
+  // Reloaded after part 1 went through: pick up at part 2 rather than
+  // asking the behaviour questions again and double-counting them.
+  if (sent(1)) { toSet2(); }
+
   document.getElementById('next1').addEventListener('click', function(){
-    document.getElementById('set1').hidden = true;
-    document.getElementById('set2').hidden = false;
-    document.getElementById('set2').scrollIntoView({behavior:'smooth', block:'start'});
+    sendStage(1, this, 'Next', toSet2);
   });
 
   document.getElementById('submit').addEventListener('click', function(){
-    var btn = this; btn.disabled = true; btn.textContent = 'Sending…';
-    var payload = {period: PERIOD};
-    ITEMS.forEach(function(i){
-      payload['has_' + i.key] = answers.has[i.key];
-      payload['ok_'  + i.key] = answers.ok[i.key];
-    });
-    jsonp('vote', payload, function(res){
-      if (res && res.ok) { try { localStorage.setItem('poll-voted-' + PERIOD, '1'); } catch(e){} showDone(); }
-      else { btn.disabled = false; btn.textContent = 'Submit'; showOffline(res && res.error); }
-    }, function(err){ btn.disabled = false; btn.textContent = 'Submit'; showOffline(err); });
+    sendStage(2, this, 'Submit', showDone);
   });
 }
 
@@ -295,7 +314,7 @@ function initResults(){
   document.getElementById('subtitle').textContent = 'Live class results. Keep this on the projector.';
   document.getElementById('rperiod').textContent = PERIOD;
   document.getElementById('resultsview').hidden = false;
-  renderBars({n:0, has:{music:0,movies:0,games:0}, ok:{music:0,movies:0,games:0}});
+  renderBars({n:0, n_has:0, n_ok:0, has:{music:0,movies:0,games:0}, ok:{music:0,movies:0,games:0}});
 
   if (ADMINKEY) {
     var p = document.createElement('p');
@@ -324,13 +343,20 @@ function poll(){
 }
 
 function renderBars(c){
-  document.getElementById('rn').textContent = c.n;
+  var nHas = c.n_has !== undefined ? c.n_has : c.n;
+  var nOk  = c.n_ok  !== undefined ? c.n_ok  : c.n;
+  document.getElementById('rn').textContent =
+    nOk ? (nHas + ' / ' + nOk) : nHas;
+  document.getElementById('rnlabel').textContent =
+    nOk ? 'answered part 1 / part 2' : 'answered part 1';
+
   var host = document.getElementById('bars');
   host.innerHTML = '';
   ITEMS.forEach(function(it){
-    var hasN = c.has[it.key] || 0, okN = c.ok[it.key] || 0;
-    var hasP = c.n ? Math.round(hasN / c.n * 100) : 0;
-    var okP  = c.n ? Math.round(okN  / c.n * 100) : 0;
+    var hasP = nHas ? Math.round((c.has[it.key] || 0) / nHas * 100) : 0;
+    var okP  = nOk  ? Math.round((c.ok[it.key]  || 0) / nOk  * 100) : 0;
+    // Each half is a percentage of the people who answered THAT half, so the
+    // numbers stay honest while part 2 is still coming in.
     var d = document.createElement('div');
     d.className = 'pair';
     d.innerHTML =
@@ -338,8 +364,8 @@ function renderBars(c){
       '<div class="bar"><span class="blabel">Have it unpaid for</span>' +
         '<span class="track"><span class="fill has" style="width:' + hasP + '%">' + (hasP > 8 ? hasP + '%' : '') + '</span></span></div>' +
       '<div class="bar"><span class="blabel">Say it’s okay to steal</span>' +
-        '<span class="track"><span class="fill ok" style="width:' + okP + '%">' + (okP > 8 ? okP + '%' : '') + '</span></span></div>' +
-      '<p class="gap">gap: ' + Math.abs(hasP - okP) + ' points</p>';
+        '<span class="track"><span class="fill ok" style="width:' + (nOk ? okP : 0) + '%">' + (nOk && okP > 8 ? okP + '%' : '') + '</span></span></div>' +
+      '<p class="gap">' + (nOk ? 'gap: ' + Math.abs(hasP - okP) + ' points' : 'waiting on part 2') + '</p>';
     host.appendChild(d);
   });
 }

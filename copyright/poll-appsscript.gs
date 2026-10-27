@@ -15,7 +15,10 @@ var ADMIN_KEY = 'change-me';
 
 var QUESTIONS = ['music', 'movies', 'games'];
 var HEADERS = ['timestamp', 'period', 'has_music', 'has_movies', 'has_games',
-               'ok_music', 'ok_movies', 'ok_games'];
+               'ok_music', 'ok_movies', 'ok_games', 'stage'];
+
+// stage '1' = the three behaviour questions, '2' = the three opinion questions,
+// 'all' = both at once (what older rows, written before the split, look like).
 
 function doGet(e) {
   var p = (e && e.parameter) || {};
@@ -52,9 +55,11 @@ function sheet_() {
 
 function vote(p) {
   var period = String(p.period || '1').slice(0, 12);
+  var stage = (p.stage === '1' || p.stage === '2') ? p.stage : 'all';
   var row = [new Date(), period];
   for (var i = 0; i < QUESTIONS.length; i++) row.push(p['has_' + QUESTIONS[i]] === '1' ? 1 : 0);
   for (var j = 0; j < QUESTIONS.length; j++) row.push(p['ok_' + QUESTIONS[j]] === '1' ? 1 : 0);
+  row.push(stage);
 
   // Two students can submit in the same instant; without the lock one row overwrites the other.
   var lock = LockService.getScriptLock();
@@ -71,19 +76,27 @@ function results(p) {
   var period = p.period ? String(p.period) : null;
   var sh = sheet_();
   var last = sh.getLastRow();
-  var counts = {n: 0, has: {music: 0, movies: 0, games: 0}, ok: {music: 0, movies: 0, games: 0}};
+  // n_has and n_ok are tracked apart: a student can answer the first three and
+  // stop, and dividing both sets by one shared total would misreport the second.
+  var counts = {n: 0, n_has: 0, n_ok: 0,
+                has: {music: 0, movies: 0, games: 0}, ok: {music: 0, movies: 0, games: 0}};
   if (last < 2) return {ok: true, counts: counts};
 
   var values = sh.getRange(2, 1, last - 1, HEADERS.length).getValues();
   for (var r = 0; r < values.length; r++) {
     var v = values[r];
     if (period && String(v[1]) !== period) continue;
-    counts.n++;
-    for (var i = 0; i < QUESTIONS.length; i++) {
-      if (v[2 + i]) counts.has[QUESTIONS[i]]++;
-      if (v[5 + i]) counts.ok[QUESTIONS[i]]++;
+    var stage = String(v[8] || 'all');
+    if (stage === '1' || stage === 'all') {
+      counts.n_has++;
+      for (var i = 0; i < QUESTIONS.length; i++) if (v[2 + i]) counts.has[QUESTIONS[i]]++;
+    }
+    if (stage === '2' || stage === 'all') {
+      counts.n_ok++;
+      for (var j = 0; j < QUESTIONS.length; j++) if (v[5 + j]) counts.ok[QUESTIONS[j]]++;
     }
   }
+  counts.n = Math.max(counts.n_has, counts.n_ok);
   return {ok: true, counts: counts};
 }
 

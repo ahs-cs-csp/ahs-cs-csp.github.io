@@ -74,7 +74,7 @@ type that.
   0/1 values. No names, no accounts, no IP addresses.
 - **Changing the script needs a redeploy** — Deploy → Manage deployments → ✏ →
   Version: New version. The `/exec` URL stays the same, so nothing in `poll.html`
-  has to change.
+  has to change. Takes about 30 seconds.
 - **If it dies mid-class**, the page shows a banner with a link that switches to
   hand-count mode. You keep the lesson, you just lose the animation. You can also
   go straight there with `poll.html?view=hand`.
@@ -82,6 +82,24 @@ type that.
   CORS headers, so a `fetch()` from the page would be blocked by the browser.
   A `<script>` tag isn't subject to that rule, and six yes/no answers fit in a
   query string easily.
+
+## How it runs in two parts
+
+Students answer the three **behaviour** questions and press Next — those three are
+sent right then. Only afterwards do they see the three **opinion** questions.
+
+That means you can put the results view on the projector, show the room that (say)
+28 of 30 of them have unpaid music, and *then* let them answer whether it is okay
+to steal it. That ordering is the entire point of the station, and it only works
+because part 1 is already counted.
+
+The results view shows two totals, `answered part 1 / part 2`. Each set's bars are
+a percentage of the people who answered **that** set, so the numbers stay honest
+while part 2 is still arriving. Until part 2 starts landing, the second bar reads
+"waiting on part 2" rather than a misleading 0%.
+
+A student who reloads after part 1 picks up at part 2 instead of being asked the
+behaviour questions again, so nothing gets double-counted.
 
 ## The questions
 
