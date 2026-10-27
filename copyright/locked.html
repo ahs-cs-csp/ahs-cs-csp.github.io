@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Locked</title>
+<style>
+:root{
+  --bg:#eef0f3; --panel:#fff; --ink:#18212b; --ink-soft:#5b6674; --rule:#d5dae1; --accent:#2f6fde;
+  --ok:#1f7a4d; --ok-bg:#e6f4ec; --no:#b3261e; --no-bg:#fbeae9; --warn:#8a5a00; --warn-bg:#fdf3e2;
+  --ui:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){:root{
+  --bg:#12171d; --panel:#1b232c; --ink:#e9edf2; --ink-soft:#9aa5b3; --rule:#2f3a47; --accent:#6ea0ff;
+  --ok:#6ddc9f; --ok-bg:#15301f; --no:#ff9b93; --no-bg:#3a1b19; --warn:#f0c173; --warn-bg:#352a14;
+  color-scheme:dark;
+}}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--ui);line-height:1.55;padding:40px 16px 56px}
+.wrap{max-width:760px;margin:0 auto;display:flex;flex-direction:column;gap:26px}
+h1{font-size:1.6rem;margin:0}
+.sub{color:var(--ink-soft);margin:6px 0 0}
+h2{font-size:.78rem;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-soft);margin:0 0 12px;font-family:var(--mono)}
+.panel{background:var(--panel);border:1px solid var(--rule);border-radius:8px;padding:18px 20px}
+.note{font-size:.88rem;color:var(--ink-soft)}
+a{color:var(--accent)}
+button{font:inherit;font-size:.92rem;padding:9px 14px;border-radius:7px;border:1px solid var(--rule);
+  background:var(--panel);color:var(--ink);cursor:pointer}
+button:hover{border-color:var(--accent)}
+button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+button[disabled]{cursor:default;opacity:.5}
+
+/* the 1998 hinge */
+.twolaws{display:grid;gap:12px}
+@media(min-width:620px){.twolaws{grid-template-columns:1fr 1fr}}
+.law{border:1px solid var(--rule);border-radius:7px;padding:13px 15px;background:var(--bg)}
+.law .d{font-family:var(--mono);font-size:.78rem;color:var(--accent);font-weight:700}
+.law h3{margin:2px 0 5px;font-size:1rem}
+.law p{margin:0;font-size:.89rem;color:var(--ink-soft)}
+
+/* shelf */
+.shelf{display:flex;flex-direction:column;gap:12px}
+.item{border:1px solid var(--rule);border-left:4px solid var(--accent);border-radius:7px;padding:14px 16px;background:var(--panel)}
+.item.blocked{border-left-color:var(--no)}
+.item.allowed{border-left-color:var(--ok)}
+.ihead{display:flex;justify-content:space-between;gap:12px;align-items:baseline;flex-wrap:wrap}
+.iname{font-weight:600}
+.ipaid{font-family:var(--mono);font-size:.76rem;color:var(--ink-soft)}
+.iwant{margin:7px 0 10px;font-size:.93rem}
+.out{border-radius:6px;padding:11px 13px;margin-top:10px;font-size:.92rem}
+.out.no{background:var(--no-bg);border:1px solid var(--no)}
+.out.ok{background:var(--ok-bg);border:1px solid var(--ok)}
+.out strong{display:block;margin-bottom:3px}
+.out .legal{display:block;margin-top:7px;padding-top:7px;border-top:1px solid var(--rule);color:var(--ink-soft);font-size:.87rem}
+.tally{font-family:var(--mono);font-size:.85rem;color:var(--ink-soft)}
+
+/* 1201 */
+.big{background:var(--warn-bg);border:1px solid var(--warn);border-radius:7px;padding:14px 16px}
+.laws3{counter-reset:l;list-style:none;margin:0;padding:0}
+.laws3 li{display:flex;gap:11px;align-items:flex-start;padding:9px 0;border-bottom:1px solid var(--rule)}
+.laws3 li:last-child{border-bottom:0}
+.laws3 li::before{counter-increment:l;content:counter(l);flex:0 0 auto;width:22px;height:22px;border-radius:50%;
+  background:var(--accent);color:#fff;font-size:.75rem;font-weight:700;display:grid;place-items:center;margin-top:3px}
+.laws3 .txt{font-weight:500}
+.laws3 .gloss{display:block;font-weight:400;font-size:.88rem;color:var(--ink-soft);margin-top:2px}
+.sides{display:grid;gap:12px;margin-top:12px}
+@media(min-width:620px){.sides{grid-template-columns:1fr 1fr}}
+.side{border:1px solid var(--rule);border-radius:7px;padding:12px 14px;background:var(--bg)}
+.side h3{margin:0 0 5px;font-size:.95rem}
+.side p{margin:0;font-size:.89rem}
+footer{font-size:.82rem;color:var(--ink-soft);border-top:1px solid var(--rule);padding-top:14px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <h1>Locked</h1>
+    <p class="sub">Unit 2 Lab 5. Fair use is a right you have. This page is about what happens when the thing you have a right to do is behind a lock.</p>
+  </header>
+
+  <section class="panel">
+    <h2>One week in October 1998</h2>
+    <div class="twolaws">
+      <div class="law">
+        <span class="d">27 October 1998</span>
+        <h3>Copyright Term Extension Act</h3>
+        <p>Copyright gets 20 years longer. You met this one on the Copyright Clock page &mdash; it is what Eric Eldred sued over, and what Creative Commons was built in response to.</p>
+      </div>
+      <div class="law">
+        <span class="d">28 October 1998</span>
+        <h3>Digital Millennium Copyright Act</h3>
+        <p>Signed the <strong>next day</strong>. Among other things it made it illegal to break a digital lock on a copyrighted work &mdash; even when what you wanted to do with the work was perfectly legal.</p>
+      </div>
+    </div>
+    <p class="note" style="margin:14px 0 0">Two laws, one day apart. One made copyright last longer; the other let companies put locks on it and called picking them a crime. Creative Commons answers the first. Nothing much answers the second.</p>
+  </section>
+
+  <section class="panel">
+    <h2>Your stuff</h2>
+    <p class="note" style="margin:0 0 14px">You paid for all of these. Try to do something ordinary with each one.</p>
+    <div class="shelf" id="shelf"></div>
+    <p class="tally" id="tally" style="margin:14px 0 0"></p>
+  </section>
+
+  <section class="panel">
+    <h2>So pick the lock</h2>
+    <div class="big">
+      <strong>DMCA section 1201</strong> makes it illegal to get around a technological measure that controls access to a copyrighted work &mdash; and illegal to make or share a tool that does it.
+      <p style="margin:8px 0 0">Read that again, because of what it does <em>not</em> say. It does not say &ldquo;illegal to infringe.&rdquo; Breaking the lock is its own offence, <strong>separate from</strong> whether your actual use was legal. Your fair use right survives. Your ability to exercise it does not.</p>
+    </div>
+    <div class="sides">
+      <div class="side">
+        <h3>What you are allowed to do</h3>
+        <p>Quote a film in an essay. Make an accessible copy for a blind student. Repair a machine you own. Back up what you bought.</p>
+      </div>
+      <div class="side">
+        <h3>What section 1201 does about it</h3>
+        <p>Nothing &mdash; those uses stay legal. But if a lock stands between you and doing them, removing the lock is a separate violation. The lock outranks the right.</p>
+      </div>
+    </div>
+    <p class="note" style="margin:14px 0 0"><strong>There is a release valve, and it is a strange one.</strong> Every three years the Librarian of Congress holds hearings and grants temporary exemptions &mdash; past ones have covered things like repairing devices, unlocking phones, accessibility, preservation and classroom film clips. They expire. People have to show up and ask for them again. A right you must re-apply for every three years is a different kind of right.</p>
+  </section>
+
+  <section class="panel">
+    <h2>Cory Doctorow's three laws</h2>
+    <p class="note" style="margin:0 0 10px">From <em>Information Doesn&rsquo;t Want to Be Free</em> (2014). You met Doctorow on the license page, giving a novel away on the day it went on sale. He spent years at the Electronic Frontier Foundation fighting the other half of 1998.</p>
+    <ol class="laws3">
+      <li><span class="txt">Any time someone puts a lock on something that belongs to you and won&rsquo;t give you the key, that lock isn&rsquo;t there for your benefit.
+        <span class="gloss">Test it against the shelf above. For each lock, ask who it actually protects.</span></span></li>
+      <li><span class="txt">Fame won&rsquo;t make you rich, but you can&rsquo;t get paid without it.
+        <span class="gloss">Why he gave the book away. For a new writer the enemy is obscurity, not copying.</span></span></li>
+      <li><span class="txt">Information doesn&rsquo;t want to be free. <em>People</em> do.
+        <span class="gloss">A correction to the old slogan. Information wants nothing; it is not alive. The argument was always about people.</span></span></li>
+    </ol>
+  </section>
+
+  <section class="panel">
+    <h2>In your pair doc</h2>
+    <ul style="margin:0;padding-left:18px">
+      <li>Pick one lock from the shelf. Who does it protect, and who does it cost? Use Doctorow&rsquo;s first law.</li>
+      <li>A teacher wants to make an audio version of a locked textbook for a blind student. The use is legal. Explain, in your own words, why she still may not be allowed to do it.</li>
+      <li>The two 1998 laws were signed a day apart. Creative Commons was built to answer the first one. Could something like CC answer the second? Why or why not?</li>
+      <li>Doctorow says information doesn&rsquo;t want to be free, people do. What does he gain by changing the sentence that way?</li>
+    </ul>
+  </section>
+
+  <footer>Albany High School &middot; CS Principles &middot; <a href="../index.html">All pages</a></footer>
+</div>
+
+<script>
+var ITEMS = [
+  {
+    name: 'An ebook',
+    paid: 'you paid $14.99',
+    want: 'Read it on your other tablet.',
+    blocked: true,
+    lock: 'Device limit',
+    what: 'The file checks which account and device opened it. Your other tablet is not on the list, so it will not open.',
+    legal: 'Reading a book you bought is obviously legal. Copying the file to your own device is almost certainly fine too. Stripping the check so it opens is the part section 1201 forbids.'
+  },
+  {
+    name: 'A rented film',
+    paid: 'you paid $4.99',
+    want: 'Finish watching it on day 31.',
+    blocked: true,
+    lock: 'Expiry',
+    what: 'The file still sits on your drive, whole. It simply refuses to play. Nothing was taken away; a date passed.',
+    legal: 'You agreed to 30 days, so the rule is fair enough. Worth noticing what is new: a seller can now enforce the deal from inside the thing you bought, without ever going to court.'
+  },
+  {
+    name: 'A DVD bought in London',
+    paid: 'you paid £12',
+    want: 'Play it on your player at home.',
+    blocked: true,
+    lock: 'Region code',
+    what: 'The disc is stamped region 2. Your player is region 1. Same film, same disc, refuses to spin.',
+    legal: 'You own this disc outright. The lock exists so studios can release at different times and prices in different countries — it protects a business model, not a copyright.'
+  },
+  {
+    name: 'Your printer',
+    paid: 'you paid $89',
+    want: 'Use a cheaper third-party ink cartridge.',
+    blocked: false,
+    lock: 'Chip handshake — and a lawsuit',
+    what: 'Lexmark put a chip in its cartridges and sued a competitor who copied the handshake, arguing the DMCA protected it. In 2004 the appeals court said no: the code was there to block competitors, not to protect a creative work.',
+    legal: 'This is the case where a court pushed back. It matters because it drew a line — you cannot wrap any old product in a few lines of code and call it copyright.'
+  },
+  {
+    name: 'A textbook for a blind student',
+    paid: 'the school paid $120',
+    want: 'Make an audio version a screen reader can read.',
+    blocked: true,
+    lock: 'Access control',
+    what: 'The file blocks text extraction, so the screen reader gets nothing. The student cannot use the book the school bought for them.',
+    legal: 'This is the one that should bother you. The use is lawful, and accessibility has been one of the exemptions granted — but exemptions expire every three years and have to be argued for again, by people with lawyers.'
+  }
+];
+
+var shelf = document.getElementById('shelf');
+var tried = 0, blockedCount = 0;
+
+ITEMS.forEach(function(it){
+  var el = document.createElement('div');
+  el.className = 'item';
+  el.innerHTML =
+    '<div class="ihead"><span class="iname">' + it.name + '</span><span class="ipaid">' + it.paid + '</span></div>' +
+    '<p class="iwant">' + it.want + '</p>' +
+    '<button type="button">Try it</button>' +
+    '<div class="out" hidden></div>';
+
+  var btn = el.querySelector('button');
+  var out = el.querySelector('.out');
+
+  btn.addEventListener('click', function(){
+    btn.disabled = true;
+    el.classList.add(it.blocked ? 'blocked' : 'allowed');
+    out.className = 'out ' + (it.blocked ? 'no' : 'ok');
+    out.innerHTML =
+      '<strong>' + (it.blocked ? '✗ Blocked — ' + it.lock : '✓ Allowed — ' + it.lock) + '</strong>' +
+      it.what +
+      '<span class="legal">' + it.legal + '</span>';
+    out.hidden = false;
+
+    tried++; if (it.blocked) blockedCount++;
+    document.getElementById('tally').textContent =
+      'Tried ' + tried + ' of ' + ITEMS.length + '. Blocked: ' + blockedCount + '.' +
+      (tried === ITEMS.length ? '  Every one of those uses was legal.' : '');
+  });
+
+  shelf.appendChild(el);
+});
+</script>
+</body>
+</html>
