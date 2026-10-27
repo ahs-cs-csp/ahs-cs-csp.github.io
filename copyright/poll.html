@@ -259,7 +259,7 @@ function markSent(stage){ try { localStorage.setItem(flag(stage), '1'); } catch(
 
 /* Each half is sent as it is finished, so the first three answers are on the
    board before anyone is asked whether stealing is okay. That ordering is the
-   whole point of the station, and it only works if part 1 is already counted. */
+   whole point of this part, and it only works if part 1 is already counted. */
 function sendStage(stage, btn, label, onDone){
   btn.disabled = true; btn.textContent = 'Sending…';
   var payload = {period: PERIOD, stage: String(stage)};
