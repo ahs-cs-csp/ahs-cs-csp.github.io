@@ -1,0 +1,295 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fair Use Court</title>
+<style>
+:root{
+  --bg:#eef0f3; --panel:#fff; --ink:#18212b; --ink-soft:#5b6674; --rule:#d5dae1; --accent:#2f6fde;
+  --yes:#1f7a4d; --yes-bg:#e6f4ec; --no:#b3261e; --no-bg:#fbeae9; --warn:#8a5a00; --warn-bg:#fdf3e2;
+  --ui:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){:root{
+  --bg:#12171d; --panel:#1b232c; --ink:#e9edf2; --ink-soft:#9aa5b3; --rule:#2f3a47; --accent:#6ea0ff;
+  --yes:#6ddc9f; --yes-bg:#15301f; --no:#ff9b93; --no-bg:#3a1b19; --warn:#f0c173; --warn-bg:#352a14;
+  color-scheme:dark;
+}}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--ui);line-height:1.55;padding:40px 16px 56px}
+.wrap{max-width:760px;margin:0 auto;display:flex;flex-direction:column;gap:26px}
+h1{font-size:1.6rem;margin:0}
+.sub{color:var(--ink-soft);margin:6px 0 0}
+h2{font-size:.78rem;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-soft);margin:0 0 10px;font-family:var(--mono)}
+.panel{background:var(--panel);border:1px solid var(--rule);border-radius:8px;padding:16px 18px}
+.factors{display:flex;flex-direction:column;gap:10px;margin:0;padding:0;list-style:none;counter-reset:f}
+.factors li{display:flex;gap:10px;align-items:flex-start}
+.factors li::before{counter-increment:f;content:counter(f);flex:0 0 auto;width:22px;height:22px;border-radius:50%;
+  background:var(--accent);color:#fff;font-size:.75rem;font-weight:700;display:grid;place-items:center;margin-top:2px}
+.fname{font-weight:600}
+.fdesc{color:var(--ink-soft);font-size:.9rem}
+.case{background:var(--panel);border:1px solid var(--rule);border-left:4px solid var(--accent);border-radius:8px;padding:16px 18px;display:flex;flex-direction:column;gap:12px}
+.case.done{border-left-color:var(--ink-soft)}
+.chead{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap}
+.cname{font-weight:600;font-size:1.05rem}
+.cmeta{font-family:var(--mono);font-size:.74rem;color:var(--ink-soft);white-space:nowrap}
+.facts{margin:0}
+.q{font-weight:600;margin:0}
+.btns{display:flex;gap:8px;flex-wrap:wrap}
+button{font:inherit;font-size:.92rem;padding:9px 14px;border-radius:7px;border:1px solid var(--rule);
+  background:var(--panel);color:var(--ink);cursor:pointer}
+button:hover{border-color:var(--accent)}
+button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+button[disabled]{cursor:default;opacity:.55}
+button.picked{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
+.verdict{border-radius:7px;padding:12px 14px;display:flex;flex-direction:column;gap:8px}
+.verdict.fair{background:var(--yes-bg);border:1px solid var(--yes)}
+.verdict.notfair{background:var(--no-bg);border:1px solid var(--no)}
+.verdict.other{background:var(--warn-bg);border:1px solid var(--warn)}
+.vline{font-weight:700}
+.verdict.fair .vline{color:var(--yes)} .verdict.notfair .vline{color:var(--no)} .verdict.other .vline{color:var(--warn)}
+.verdict p{margin:0}
+.tag{display:inline-block;font-family:var(--mono);font-size:.72rem;padding:2px 7px;border-radius:999px;
+  border:1px solid var(--rule);color:var(--ink-soft);background:var(--bg)}
+.deciding{font-size:.88rem}
+.split{display:grid;gap:12px}
+@media(min-width:620px){.split{grid-template-columns:1fr 1fr}}
+.side{border:1px solid var(--rule);border-radius:7px;padding:12px 14px;background:var(--bg)}
+.side h3{margin:0 0 6px;font-size:.95rem}
+.score{position:sticky;top:0;z-index:5;background:var(--panel);border:1px solid var(--rule);border-radius:8px;
+  padding:10px 14px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.score strong{font-family:var(--mono)}
+.note{font-size:.88rem;color:var(--ink-soft)}
+ul.plain{margin:6px 0 0;padding-left:18px}
+ul.plain li{margin:3px 0}
+footer{font-size:.82rem;color:var(--ink-soft);border-top:1px solid var(--rule);padding-top:14px}
+a{color:var(--accent)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <h1>Fair Use Court</h1>
+    <p class="sub">Station B &middot; Unit 2 Lab 5. With your partner, read each case, agree on a verdict, then reveal what really happened. Record your disagreements in your pair doc.</p>
+  </header>
+
+  <section class="panel">
+    <h2>The four factors</h2>
+    <p class="note" style="margin:0 0 12px">Courts weigh all four. No single one decides a case by itself, and there is no percentage or number of seconds that makes copying automatically legal.</p>
+    <ol class="factors">
+      <li><div><span class="fname">Purpose and character of the use</span><br><span class="fdesc">Is it <em>transformative</em> &mdash; does it add new meaning, or just repackage the original? Is it commercial? Teaching, criticism, news and parody help here.</span></div></li>
+      <li><div><span class="fname">Nature of the copyrighted work</span><br><span class="fdesc">Copying from factual work is easier to defend than copying from something highly creative, like a song or a novel.</span></div></li>
+      <li><div><span class="fname">Amount and substantiality</span><br><span class="fdesc">How much did you take &mdash; and was it <em>the heart</em> of the work? A few seconds can be too much if it is the part everyone recognizes.</span></div></li>
+      <li><div><span class="fname">Effect on the market</span><br><span class="fdesc">Does your use replace sales of the original, or cut off a market the owner would normally license?</span></div></li>
+    </ol>
+  </section>
+
+  <div class="score" role="status" aria-live="polite">
+    <span>Cases decided: <strong id="decided">0</strong> of <strong id="total">0</strong></span>
+    <span>Matched the court: <strong id="right">0</strong></span>
+    <button id="reset" type="button">Start over</button>
+  </div>
+
+  <main id="cases"></main>
+
+  <section class="panel">
+    <h2>Before you leave this station</h2>
+    <p style="margin:0 0 8px">In your pair doc, answer these together:</p>
+    <ul class="plain">
+      <li>Which case did you and your partner disagree about the most? What was the disagreement?</li>
+      <li>Find a case where your gut said one thing and the court said the other. Which factor did you underweight?</li>
+      <li>&ldquo;It was only a few seconds.&rdquo; Using a case from this station, explain why that argument is weak.</li>
+      <li>The two AI cases were decided in the same courthouse in the same month and still do not line up. What does that tell you about how settled this area of law is?</li>
+    </ul>
+  </section>
+
+  <footer>Albany High School &middot; CS Principles &middot; <a href="../index.html">All pages</a></footer>
+</div>
+
+<script>
+const CASES = [
+  {
+    name: '2 Live Crew, "Pretty Woman"',
+    meta: 'Supreme Court &middot; 1994',
+    facts: '2 Live Crew made a raunchy rap version of Roy Orbison’s "Oh, Pretty Woman," keeping the famous bass riff and the opening line, then taking the lyrics somewhere Orbison never did. They asked for a license first. They were refused. They released it anyway, and it sold commercially.',
+    answer: 'fair',
+    verdict: 'Fair use.',
+    detail: 'Campbell v. Acuff-Rose Music. The Court said parody has to conjure up the original to work — you cannot mock something the audience does not recognize. It also threw out the idea that selling something automatically defeats fair use.',
+    factor: 'Factor 1 decided it: the song commented on the original, so it was transformative.'
+  },
+  {
+    name: 'Vanilla Ice, "Ice Ice Baby"',
+    meta: 'Settled out of court &middot; 1990',
+    facts: 'The bassline under "Ice Ice Baby" is lifted from Queen and David Bowie’s "Under Pressure." It runs about seven notes. No license, no credit. Vanilla Ice first joked that he had added a note, which made it different.',
+    answer: 'notfair',
+    verdict: 'Not fair use — and it never reached a judge.',
+    detail: 'Queen and Bowie sued. It settled: they got songwriting credit and a payment, which is why their names are on the track today.',
+    factor: 'Factor 3 is the lesson: seven notes is tiny, but it was the hook — the heart of the work. "It was short" is not a defense.'
+  },
+  {
+    name: 'The Wind Done Gone',
+    meta: '11th Circuit Court of Appeals &middot; 2001',
+    facts: 'Alice Randall wrote a novel retelling Gone with the Wind from the point of view of an enslaved woman on the same plantation, using the same characters and events to attack the original’s romantic view of the Old South. The Mitchell estate sued and got the book blocked before publication.',
+    answer: 'fair',
+    verdict: 'Fair use. The ban was lifted.',
+    detail: 'SunTrust Bank v. Houghton Mifflin. The appeals court called the lower court’s injunction an unlawful prior restraint and found the book was criticism, not a sequel cashing in.',
+    factor: 'Factor 1 again: it used the original in order to argue against it.'
+  },
+  {
+    name: '"Blurred Lines"',
+    meta: 'Jury verdict 2015 — upheld on appeal 2018',
+    facts: 'Marvin Gaye’s family said Pharrell Williams and Robin Thicke copied "Got to Give It Up." No melody was copied note for note. What matched was the groove — the feel, the cowbell, the bassline’s personality.',
+    answer: 'notfair',
+    verdict: 'Infringement. About $5.3 million plus ongoing royalties.',
+    detail: 'Williams v. Gaye. Note carefully: fair use was never really the defense here. The fight was over whether copying happened at all.',
+    factor: 'The lesson is the idea/expression line: you can lose without copying a single note exactly — and many musicians think this verdict drew that line in the wrong place.'
+  },
+  {
+    name: 'Naming your song "Love Me Do"',
+    meta: 'No case needed',
+    facts: 'You write an original song and call it "Love Me Do," the same title as the Beatles track. Different melody, different lyrics, same four words on the cover.',
+    answer: 'other',
+    verdict: 'There is nothing to infringe.',
+    detail: 'Copyright does not cover titles, names, short phrases or slogans at all. You never reach the fair use question, because the title was never protected in the first place.',
+    factor: 'Worth knowing: a title can still be a trademark, which is a different law with different rules.',
+    different: true
+  },
+  {
+    name: 'Warhol’s Prince silkscreens',
+    meta: 'Supreme Court &middot; 2023',
+    facts: 'Lynn Goldsmith photographed Prince in 1981. Andy Warhol turned the photo into a silkscreen series. Decades later, after Prince died, the Warhol Foundation licensed "Orange Prince" to Condé Nast for a magazine cover — the exact kind of licensing Goldsmith does for a living.',
+    answer: 'notfair',
+    verdict: 'Not fair use. 7–2.',
+    detail: 'Andy Warhol Foundation v. Goldsmith. The Court did not ask whether Warhol’s art was transformative in general. It asked about <em>this particular use</em> — licensing it to a magazine — and that use had the same purpose as the photo itself.',
+    factor: 'Factor 1, narrowed: the question is what you did with it, not how creative the artist was.'
+  },
+  {
+    name: 'Google Books',
+    meta: '2nd Circuit Court of Appeals &middot; 2015',
+    facts: 'Google scanned millions of books, whole, without permission, and built a search engine over them. Users could search the full text but only see short snippets around their search term.',
+    answer: 'fair',
+    verdict: 'Fair use.',
+    detail: 'Authors Guild v. Google. Copying 100% of each book was fine because of what the copying was <em>for</em>: it produced information about the books rather than a substitute for reading them.',
+    factor: 'Factors 1 and 4 together: a search tool is a different purpose, and snippets do not replace buying the book.'
+  },
+  {
+    name: 'Google v. Oracle — the Java API',
+    meta: 'Supreme Court &middot; 2021',
+    facts: 'To build Android, Google reimplemented about 11,500 lines of Java’s declaring code — the names and structure programmers type, like java.lang.Math.max — so that every Java developer already knew how to use it. Google wrote its own implementation underneath. Oracle wanted billions.',
+    answer: 'fair',
+    verdict: 'Fair use. 6–2.',
+    detail: 'Google LLC v. Oracle America. The Court treated declaring code as further from the core of copyright than most code, because its value comes from programmers having memorised it.',
+    factor: 'Factors 1 and 2: reusing an interface so people can apply skills they already have is transformative. This is the case that most affects you as programmers.'
+  }
+];
+
+const AI_CARD = {
+  name: 'Training an AI on books',
+  meta: 'Two courts &middot; same month &middot; 2025',
+  facts: 'AI companies trained large language models on enormous collections of books, without asking the authors. Authors sued. Two judges in the same San Francisco courthouse ruled within weeks of each other — and the rulings do not line up.'
+};
+
+const wrap = document.getElementById('cases');
+let decided = 0, right = 0;
+const LABEL = {fair:'Fair use', notfair:'Not fair use', other:'Neither — something else is going on'};
+
+function render(){
+  wrap.innerHTML = '';
+  decided = 0; right = 0; sync();
+
+  CASES.forEach((c, i) => {
+    const el = document.createElement('article');
+    el.className = 'case';
+    el.innerHTML = `
+      <div class="chead">
+        <span class="cname">${i+1}. ${c.name}</span>
+        <span class="cmeta">${c.meta}</span>
+      </div>
+      <p class="facts">${c.facts}</p>
+      <p class="q">Your verdict?</p>
+      <div class="btns">
+        <button type="button" data-v="fair">Fair use</button>
+        <button type="button" data-v="notfair">Not fair use</button>
+        ${c.different ? '<button type="button" data-v="other">Neither</button>' : ''}
+      </div>
+      <div class="verdict" hidden></div>`;
+
+    const btns = el.querySelectorAll('button[data-v]');
+    const out = el.querySelector('.verdict');
+
+    btns.forEach(b => b.addEventListener('click', () => {
+      const pick = b.dataset.v;
+      btns.forEach(x => { x.disabled = true; });
+      b.classList.add('picked');
+      el.classList.add('done');
+
+      const ok = pick === c.answer;
+      out.className = 'verdict ' + (c.answer === 'fair' ? 'fair' : c.answer === 'other' ? 'other' : 'notfair');
+      out.innerHTML = `
+        <span class="vline">${c.verdict}</span>
+        <p>${c.detail}</p>
+        <p class="deciding"><span class="tag">deciding factor</span> ${c.factor}</p>
+        <p class="note">You said <strong>${LABEL[pick]}</strong> &mdash; ${ok ? 'that matches the court.' : 'the court went the other way.'}</p>`;
+      out.hidden = false;
+
+      decided++; if (ok) right++;
+      sync();
+    }));
+
+    wrap.appendChild(el);
+  });
+
+  // The AI pair: a discussion card, not a scored one.
+  const ai = document.createElement('article');
+  ai.className = 'case';
+  ai.innerHTML = `
+    <div class="chead">
+      <span class="cname">${CASES.length+1}. ${AI_CARD.name}</span>
+      <span class="cmeta">${AI_CARD.meta}</span>
+    </div>
+    <p class="facts">${AI_CARD.facts}</p>
+    <p class="q">Talk it through first: is training a model on a book more like Google Books, or more like Warhol?</p>
+    <div class="btns"><button type="button" id="aireveal">Show both rulings</button></div>
+    <div class="verdict other" id="aiout" hidden>
+      <span class="vline">The judges disagreed. This area of law is not settled.</span>
+      <div class="split">
+        <div class="side">
+          <h3>Bartz v. Anthropic</h3>
+          <p class="note" style="margin:0 0 6px">Judge Alsup, June 2025</p>
+          <p>Training on books the company <em>bought</em> was fair use — he called it transformative. But downloading and keeping pirated copies in a central library was <strong>not</strong> fair use. Those are two different acts.</p>
+          <p style="margin-top:6px">It settled for <strong>$1.5 billion</strong>, roughly $3,000 per work across about half a million titles — the largest copyright settlement in US history. Final approval came in July 2026, and Anthropic was ordered to destroy the pirated files. No trial, and no admission of liability.</p>
+        </div>
+        <div class="side">
+          <h3>Kadrey v. Meta</h3>
+          <p class="note" style="margin:0 0 6px">Judge Chhabria, June 2025</p>
+          <p>Meta <strong>won</strong>. But read why: the judge said the authors lost because they barely argued <em>market dilution</em> — the idea that flooding the market with AI-generated books harms human authors — and brought no real evidence of it.</p>
+          <p style="margin-top:6px">He went further and wrote that market dilution will often be enough for authors to win factor 4 in future cases. The authors lost this case and were handed the argument for the next one.</p>
+        </div>
+      </div>
+      <p class="deciding"><span class="tag">what to notice</span> Both companies won the training question, yet one paid $1.5 billion over <em>how it got the books</em>. Where the files came from mattered as much as what was done with them.</p>
+    </div>`;
+  ai.querySelector('#aireveal').addEventListener('click', e => {
+    e.target.disabled = true;
+    ai.querySelector('#aiout').hidden = false;
+    ai.classList.add('done');
+  });
+  wrap.appendChild(ai);
+
+  document.getElementById('total').textContent = CASES.length;
+}
+
+function sync(){
+  document.getElementById('decided').textContent = decided;
+  document.getElementById('right').textContent = right;
+}
+
+document.getElementById('reset').addEventListener('click', render);
+render();
+</script>
+</body>
+</html>
