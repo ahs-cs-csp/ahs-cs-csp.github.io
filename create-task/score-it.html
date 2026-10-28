@@ -50,6 +50,7 @@ h2{font-size:.78rem;text-transform:uppercase;letter-spacing:.08em;color:var(--in
 .ctotal{font-family:var(--mono);font-size:.95rem;white-space:nowrap}
 .ctotal b{font-size:1.2rem}
 .label{font-family:var(--mono);font-size:.72rem;text-transform:uppercase;letter-spacing:.07em;color:var(--ink-soft);margin:0 0 6px}
+.code img.tall{max-width:min(100%,380px)}
 .code img{display:block;max-width:100%;height:auto;border-radius:6px;border:1px solid var(--rule);background:#fff}
 .nocode{border:2px dashed var(--rule);border-radius:6px;background:var(--empty);color:var(--ink-soft);padding:28px 16px;text-align:center;font-size:.92rem}
 .resp{border-top:1px solid var(--rule);padding-top:12px}
@@ -94,7 +95,7 @@ footer{font-size:.82rem;color:var(--ink-soft);border-top:1px solid var(--rule);p
         <div class="pt"><b>Point 2</b><div>Explains what that call tests and <b>what it should report</b>. Example: <code>rgby</code> and <code>rgby</code> should report 4 because every color is in the right spot.</div></div>
       </div>
     </div>
-    <p class="note">Note: a written response is scored on the code segment the student submitted.</p>
+    <p class="note">Note: a written response is scored on the code segment the student submitted. The questions ask about a <b>procedure</b>.</p>
   </section>
 
   <div id="cards"></div>
@@ -106,16 +107,17 @@ footer{font-size:.82rem;color:var(--ink-soft);border-top:1px solid var(--rule);p
 <script>
 const IMG = "img/count-correct-position.png";
 const SUBS = [
-  { id: "A", code: false,
-    iii: "My loop will never only run once because it has a hard coded for i 1 to 4 loop, the body inside of the loop will happen 4 times. I need to evaluate the body 4 times to check each part of the 4 letter guess.",
-    iv: "I want to test to see if the code segment would report 4 if I put \"royg\" into both guess and colors. This would mean that the code segment would detect that guess is the same word as colors." },
-  { id: "B", code: true,
+  { id: "A", img: "img/submission-a-script.png", tall: true,
+    alt: "A long Snap! script that starts with 'when green flag clicked': it asks for the host and player names, then a repeat until incorrect = 0 loop takes turns, asks for a guess, counts incorrect letters in a for loop, and stamps the result costumes. It is the whole game script, not a procedure.",
+    iii: "if the player guesses the color pattern first try in the repeat until loop because the loop runs until the player guessees the correct color pattern so until guess=colors and then the loop stops",
+    iv: "rrrr, the game runs till the user guesses the correct answer and it tells the user how many they got right and how many they got wrong" },
+  { id: "B", img: IMG, alt: "Snap! block 'count correct color correct position, Guess: guess, Colors: colors'. Script variables count; for i = 1 to 4: if letter i of colors = letter i of guess, change count by 1; report count.",
     iii: "The body of the iteration statement will never only execute once. There are four iterations hard-coded into the code because of the \"for i = 1 to 4\" loop, which was necessary because I needed to evaluate a four-letter code.",
     iv: "To test this procedure, I would test arguments rbvo and yvrr into the guess and secret parameters, respectively. This test should yield zero if the procedure is working properly. Additionally, I would test out rbvo and rbrr similarly, and the procedure should yield two. In calling my procedure with these specific arguments, I am testing to see if my procedure can accurately determine whether my sequence has the correct letters in the correct position." },
-  { id: "C", code: true,
+  { id: "C", img: IMG, alt: "Snap! block 'count correct color correct position, Guess: guess, Colors: colors'. Script variables count; for i = 1 to 4: if letter i of colors = letter i of guess, change count by 1; report count.",
     iii: "The loop will never stop after a single iteration, it is impossible. The for loop will always run 4 times, as it never reports early. Guess and colors are always 4 letters long.",
     iv: "You are testing whether the function returns the correct amount of correct letters in a guess. The code segment has to determine whether or not the guess has the same letters as the colors." },
-  { id: "D", code: true,
+  { id: "D", img: IMG, alt: "Snap! block 'count correct color correct position, Guess: guess, Colors: colors'. Script variables count; for i = 1 to 4: if letter i of colors = letter i of guess, change count by 1; report count.",
     iii: "It will never happen because its inside a for i loop to 4, in which it will never end until i=4. I will never equal 4 on the first iteration due to it only adding 1 to i each iteration.",
     iv: "I would call the procedure with count_correct_color_correct_position(guess, colors), using a guess such as [\"r\", \"b\", \"g\", \"y\"] and the secret colors as the second argument. I am testing whether the procedure correctly counts how many colors are in the correct positions by comparing the guess with the secret colors." }
 ];
@@ -136,8 +138,8 @@ function render() {
       <div class="chead"><h3>Submission ${s.id}</h3><div class="ctotal" id="ct-${s.id}"></div></div>
       <div class="code">
         <p class="label">Code segment submitted</p>
-        ${s.code
-          ? `<img src="${IMG}" alt="Snap! block 'count correct color correct position, Guess: guess, Colors: colors'. Script variables count; for i = 1 to 4: if letter i of colors = letter i of guess, change count by 1; report count.">`
+        ${s.img
+          ? `<img class="${s.tall ? "tall" : ""}" src="${s.img}" alt="${esc(s.alt)}">`
           : `<div class="nocode">No code segment was submitted.</div>`}
       </div>
       ${QS.map(([q, title]) => `
