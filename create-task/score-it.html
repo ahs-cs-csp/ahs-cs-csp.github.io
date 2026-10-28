@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Score It: Create Task Responses</title>
+<style>
+:root{
+  --bg:#eef0f3; --panel:#fff; --ink:#18212b; --ink-soft:#5b6674; --rule:#d5dae1; --accent:#2f6fde;
+  --chip:#e7edf9; --empty:#f6f7f9;
+  --ui:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){:root{
+  --bg:#12171d; --panel:#1b232c; --ink:#e9edf2; --ink-soft:#9aa5b3; --rule:#2f3a47; --accent:#6ea0ff;
+  --chip:#22314a; --empty:#161d25; color-scheme:dark;
+}}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--ui);line-height:1.55;padding:0 16px 56px}
+.wrap{max-width:760px;margin:0 auto;display:flex;flex-direction:column;gap:22px}
+header{padding-top:32px}
+h1{font-size:1.5rem;margin:0}
+.sub{color:var(--ink-soft);margin:6px 0 0}
+a{color:var(--accent)}
+h2{font-size:.78rem;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-soft);margin:0 0 10px;font-family:var(--mono)}
+.panel{background:var(--panel);border:1px solid var(--rule);border-radius:8px;padding:16px 18px}
+.rubric{display:grid;grid-template-columns:1fr;gap:14px}
+.rubric h3{margin:0 0 6px;font-size:1rem}
+.q{font-style:italic;color:var(--ink-soft);margin:0 0 8px;font-size:.92rem}
+.pt{display:flex;gap:10px;margin:6px 0}
+.pt b{flex:0 0 auto;font-family:var(--mono);font-size:.78rem;background:var(--chip);color:var(--accent);border-radius:4px;padding:1px 7px;height:fit-content;margin-top:2px}
+.note{font-size:.88rem;color:var(--ink-soft);margin:4px 0 0}
+
+/* sticky scoreboard */
+.board{position:sticky;top:0;z-index:5;background:var(--bg);padding:10px 0 8px;border-bottom:1px solid var(--rule)}
+.board-inner{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.bchip{display:flex;align-items:center;gap:6px;background:var(--panel);border:1px solid var(--rule);border-radius:999px;padding:4px 10px;font-size:.85rem;text-decoration:none;color:inherit}
+.bchip .bscore{font-family:var(--mono);font-weight:700}
+.bchip.complete{border-color:var(--accent)}
+.btotal{margin-left:auto;font-size:.85rem;color:var(--ink-soft)}
+.btotal b{color:var(--ink);font-family:var(--mono)}
+
+/* submission cards */
+.card{background:var(--panel);border:1px solid var(--rule);border-left:4px solid var(--accent);border-radius:8px;padding:16px 18px;display:flex;flex-direction:column;gap:14px;scroll-margin-top:70px}
+.chead{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.chead h3{margin:0;font-size:1.1rem}
+.ctotal{font-family:var(--mono);font-size:.95rem;white-space:nowrap}
+.ctotal b{font-size:1.2rem}
+.label{font-family:var(--mono);font-size:.72rem;text-transform:uppercase;letter-spacing:.07em;color:var(--ink-soft);margin:0 0 6px}
+.code img{display:block;max-width:100%;height:auto;border-radius:6px;border:1px solid var(--rule);background:#fff}
+.nocode{border:2px dashed var(--rule);border-radius:6px;background:var(--empty);color:var(--ink-soft);padding:28px 16px;text-align:center;font-size:.92rem}
+.resp{border-top:1px solid var(--rule);padding-top:12px}
+.resp blockquote{margin:0 0 10px;padding:10px 12px;border-left:3px solid var(--rule);background:var(--empty);border-radius:0 6px 6px 0}
+.score{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.score span{font-size:.88rem;color:var(--ink-soft);margin-right:2px}
+.score button{font:inherit;font-family:var(--mono);font-weight:700;min-width:44px;min-height:36px;border-radius:6px;border:1px solid var(--rule);background:var(--panel);color:var(--ink);cursor:pointer}
+.score button:hover{border-color:var(--accent)}
+.score button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.score button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
+.why{width:100%;font:inherit;font-size:.9rem;margin-top:8px;padding:8px 10px;border:1px solid var(--rule);border-radius:6px;background:var(--panel);color:var(--ink);resize:vertical;min-height:2.6em}
+.actions{display:flex;justify-content:flex-end}
+.reset{font:inherit;font-size:.85rem;background:none;border:1px solid var(--rule);color:var(--ink-soft);border-radius:6px;padding:6px 12px;cursor:pointer}
+footer{font-size:.82rem;color:var(--ink-soft);border-top:1px solid var(--rule);padding-top:14px}
+@media (min-width:640px){.rubric{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<div class="board" aria-label="Scoreboard">
+  <div class="wrap"><div class="board-inner" id="board"></div></div>
+</div>
+<div class="wrap">
+  <header>
+    <p class="sub" style="margin:0 0 4px"><a href="../index.html">&larr; AHS CS Principles</a></p>
+    <h1>Score It: Create Task Written Responses</h1>
+    <p class="sub">You are the AP reader. Four(4) real submissions, names removed. Score each response 0, 1, or 2 using the rubric, and write one sentence on why.</p>
+  </header>
+
+  <section class="panel">
+    <h2>The rubric</h2>
+    <div class="rubric">
+      <div>
+        <h3>Question iii</h3>
+        <p class="q">Consider the first iteration included in the first code segment. Describe the conditions that will cause the body of the iteration statement to execute once.</p>
+        <div class="pt"><b>Point 1</b><div>Says this <b>can't happen</b>: the loop is hard-coded to run from 1 to 4, so the body always runs four(4) times.</div></div>
+        <div class="pt"><b>Point 2</b><div>Explains <b>why</b> the 1 to 4 never changes <b>in this program</b>: we are always comparing four-letter color codes.</div></div>
+      </div>
+      <div>
+        <h3>Question iv</h3>
+        <p class="q">Consider the first code segment. Write a call to your procedure with specific argument(s) that you could use for testing this procedure. Describe the program functionality you are testing related to this call.</p>
+        <div class="pt"><b>Point 1</b><div>Gives <b>both</b> arguments, Guess and Colors, as specific four-letter codes using r, o, y, g, b, v.</div></div>
+        <div class="pt"><b>Point 2</b><div>Explains what that call tests and <b>what it should report</b>. Example: <code>rgby</code> and <code>rgby</code> should report 4 because every color is in the right spot.</div></div>
+      </div>
+    </div>
+    <p class="note">Note: a written response is scored on the code segment the student submitted.</p>
+  </section>
+
+  <div id="cards"></div>
+
+  <div class="actions"><button class="reset" id="reset" type="button">Clear all my scores</button></div>
+  <footer>Albany High School &middot; CS Principles &middot; Create Task practice</footer>
+</div>
+
+<script>
+const IMG = "img/count-correct-position.png";
+const SUBS = [
+  { id: "A", code: false,
+    iii: "My loop will never only run once because it has a hard coded for i 1 to 4 loop, the body inside of the loop will happen 4 times. I need to evaluate the body 4 times to check each part of the 4 letter guess.",
+    iv: "I want to test to see if the code segment would report 4 if I put \"royg\" into both guess and colors. This would mean that the code segment would detect that guess is the same word as colors." },
+  { id: "B", code: true,
+    iii: "The body of the iteration statement will never only execute once. There are four iterations hard-coded into the code because of the \"for i = 1 to 4\" loop, which was necessary because I needed to evaluate a four-letter code.",
+    iv: "To test this procedure, I would test arguments rbvo and yvrr into the guess and secret parameters, respectively. This test should yield zero if the procedure is working properly. Additionally, I would test out rbvo and rbrr similarly, and the procedure should yield two. In calling my procedure with these specific arguments, I am testing to see if my procedure can accurately determine whether my sequence has the correct letters in the correct position." },
+  { id: "C", code: true,
+    iii: "The loop will never stop after a single iteration, it is impossible. The for loop will always run 4 times, as it never reports early. Guess and colors are always 4 letters long.",
+    iv: "You are testing whether the function returns the correct amount of correct letters in a guess. The code segment has to determine whether or not the guess has the same letters as the colors." },
+  { id: "D", code: true,
+    iii: "It will never happen because its inside a for i loop to 4, in which it will never end until i=4. I will never equal 4 on the first iteration due to it only adding 1 to i each iteration.",
+    iv: "I would call the procedure with count_correct_color_correct_position(guess, colors), using a guess such as [\"r\", \"b\", \"g\", \"y\"] and the secret colors as the second argument. I am testing whether the procedure correctly counts how many colors are in the correct positions by comparing the guess with the secret colors." }
+];
+const QS = [["iii", "Question iii"], ["iv", "Question iv"]];
+const KEY = "csp-score-it-v1";
+
+let state = {};
+try { state = JSON.parse(localStorage.getItem(KEY)) || {}; } catch (e) { state = {}; }
+function save() { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {} }
+
+function esc(s) { const d = document.createElement("div"); d.textContent = s; return d.innerHTML; }
+
+function render() {
+  const cards = document.getElementById("cards");
+  cards.style.display = "flex"; cards.style.flexDirection = "column"; cards.style.gap = "18px";
+  cards.innerHTML = SUBS.map(s => `
+    <article class="card" id="sub-${s.id}">
+      <div class="chead"><h3>Submission ${s.id}</h3><div class="ctotal" id="ct-${s.id}"></div></div>
+      <div class="code">
+        <p class="label">Code segment submitted</p>
+        ${s.code
+          ? `<img src="${IMG}" alt="Snap! block 'count correct color correct position, Guess: guess, Colors: colors'. Script variables count; for i = 1 to 4: if letter i of colors = letter i of guess, change count by 1; report count.">`
+          : `<div class="nocode">No code segment was submitted.</div>`}
+      </div>
+      ${QS.map(([q, title]) => `
+        <div class="resp">
+          <p class="label">${title}: student response</p>
+          <blockquote>${esc(s[q])}</blockquote>
+          <div class="score" role="group" aria-label="Score for submission ${s.id}, ${title}">
+            <span>Score:</span>
+            ${[0, 1, 2].map(n => `<button type="button" data-s="${s.id}" data-q="${q}" data-n="${n}">${n}</button>`).join("")}
+          </div>
+          <textarea class="why" data-s="${s.id}" data-q="${q}" rows="1" placeholder="Why? One sentence!"></textarea>
+        </div>`).join("")}
+    </article>`).join("");
+
+  cards.addEventListener("click", e => {
+    const b = e.target.closest("button[data-n]");
+    if (!b) return;
+    const k = b.dataset.s + "." + b.dataset.q;
+    state[k] = state[k] || {};
+    const n = Number(b.dataset.n);
+    state[k].n = state[k].n === n ? undefined : n;
+    save(); update();
+  });
+  cards.addEventListener("input", e => {
+    const t = e.target.closest("textarea.why");
+    if (!t) return;
+    const k = t.dataset.s + "." + t.dataset.q;
+    state[k] = state[k] || {};
+    state[k].why = t.value;
+    save();
+  });
+  document.querySelectorAll("textarea.why").forEach(t => {
+    const v = state[t.dataset.s + "." + t.dataset.q];
+    if (v && v.why) t.value = v.why;
+  });
+  update();
+}
+
+function score(s, q) { const v = state[s + "." + q]; return v && typeof v.n === "number" ? v.n : null; }
+
+function update() {
+  document.querySelectorAll("button[data-n]").forEach(b => {
+    b.setAttribute("aria-pressed", score(b.dataset.s, b.dataset.q) === Number(b.dataset.n) ? "true" : "false");
+  });
+  let grand = 0, done = 0;
+  const chips = SUBS.map(s => {
+    const a = score(s.id, "iii"), b = score(s.id, "iv");
+    const t = (a ?? 0) + (b ?? 0);
+    const complete = a !== null && b !== null;
+    grand += t; done += (a !== null) + (b !== null);
+    document.getElementById("ct-" + s.id).innerHTML =
+      `iii ${a ?? "–"} + iv ${b ?? "–"} = <b>${complete ? t : "–"}</b> / 4`;
+    return `<a class="bchip${complete ? " complete" : ""}" href="#sub-${s.id}">${s.id} <span class="bscore">${complete ? t : (a ?? b ?? "–") + (a !== null || b !== null ? "…" : "")}</span>/4</a>`;
+  }).join("");
+  document.getElementById("board").innerHTML =
+    chips + `<span class="btotal">Scored ${done} of 8 &middot; Total <b>${grand}</b> / 16</span>`;
+}
+
+document.getElementById("reset").addEventListener("click", () => {
+  if (!confirm("Clear all your scores and reasons?")) return;
+  state = {}; save();
+  document.querySelectorAll("textarea.why").forEach(t => t.value = "");
+  update();
+});
+
+render();
+</script>
+</body>
+</html>
