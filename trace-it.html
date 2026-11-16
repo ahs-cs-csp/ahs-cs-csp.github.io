@@ -21,7 +21,7 @@
 [hidden]{display:none!important}
 html,body{margin:0}
 body{background:var(--bg);color:var(--ink);font-family:var(--ui);line-height:1.55;padding:28px 16px 64px}
-.wrap{max-width:860px;margin:0 auto;display:flex;flex-direction:column;gap:22px}
+.wrap{max-width:900px;margin:0 auto;display:flex;flex-direction:column;gap:22px}
 h1{font-size:1.6rem;margin:0}
 .sub{color:var(--ink-soft);margin:6px 0 0;font-size:.95rem}
 .sub a{color:var(--accent)}
@@ -31,52 +31,48 @@ h3{font-size:1.05rem;margin:0}
 .panel.prob{border-left:4px solid var(--accent)}
 .note{background:var(--mark);color:var(--mark-ink);border-radius:8px;padding:10px 12px;font-size:.9rem;margin:0}
 .ctx{margin:10px 0 0;font-size:.95rem}
-.two{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:18px;margin-top:14px}
+.two{display:grid;grid-template-columns:minmax(0,320px) minmax(0,1fr);gap:18px;margin-top:14px}
 .two>div:first-child{position:sticky;top:16px;align-self:start}
-@media (max-width:720px){.two{grid-template-columns:minmax(0,1fr)}.two>div:first-child{position:static}}
+@media (max-width:780px){.two{grid-template-columns:minmax(0,1fr)}.two>div:first-child{position:static}}
 
-/* code */
 .code{background:var(--bg);border:1px solid var(--rule);border-radius:8px;padding:10px 0;overflow-x:auto}
-.code .ln{display:flex;gap:10px;padding:1px 12px;font-family:var(--mono);font-size:.84rem;white-space:pre;line-height:1.5}
-.code .ln .g{color:var(--ink-soft);min-width:1.6em;text-align:right;user-select:none;font-size:.78rem}
-.code .ln.on{background:var(--mark);color:var(--mark-ink)}
-.code .ln.on .g{color:var(--mark-ink)}
+.code .ln{display:flex;gap:10px;padding:1px 12px;font-family:var(--mono);font-size:.82rem;white-space:pre;line-height:1.5}
+.code .ln .g{color:var(--ink-soft);min-width:1.6em;text-align:right;user-select:none;font-size:.76rem}
 
-/* stages */
 .stage{border-top:1px solid var(--rule);margin-top:16px;padding-top:14px}
-.stage .shead{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+.shead{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
 .step-n{font-family:var(--mono);font-size:.75rem;color:#fff;background:var(--accent);border-radius:999px;padding:2px 8px}
 @media (prefers-color-scheme:dark){.step-n{color:#0d1218}}
 .ask{margin:8px 0 10px;font-size:.95rem}
 label.f{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:.86rem;margin:0 14px 8px 0}
-input[type=number],input[type=text]{font-family:var(--mono);font-size:.9rem;width:5.5em;padding:5px 7px;
+input[type=number],input[type=text],select{font-family:var(--mono);font-size:.88rem;padding:5px 7px;
   border:1px solid var(--rule);border-radius:6px;background:var(--panel);color:var(--ink)}
-input:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
-button{font:inherit;font-size:.88rem;padding:7px 14px;border-radius:7px;border:1px solid var(--accent);
+input[type=number],input[type=text]{width:5.5em}
+input:focus-visible,select:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+button{font:inherit;font-size:.86rem;padding:6px 12px;border-radius:7px;border:1px solid var(--accent);
   background:var(--accent);color:#fff;cursor:pointer}
 @media (prefers-color-scheme:dark){button{color:#0d1218}}
 button.ghost{background:transparent;color:var(--accent)}
+button.mini{font-size:.78rem;padding:4px 9px}
 button:disabled{opacity:.45;cursor:default}
-.actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:4px}
+.actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:10px}
 .verdict{font-size:.9rem;margin:10px 0 0;padding:9px 11px;border-radius:7px}
 .verdict.ok{background:var(--good-bg);color:var(--good)}
 .verdict.no{background:var(--bad-bg);color:var(--bad)}
 
-/* tables */
 table{border-collapse:collapse;width:100%;font-size:.88rem;margin:4px 0 0}
-th,td{border:1px solid var(--rule);padding:6px 8px;text-align:left}
-th{font-family:var(--mono);font-size:.76rem;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-soft);font-weight:600}
-td.n{font-family:var(--mono)}
-table input{width:4.5em}
-
-/* tracer */
-.vars{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 0}
-.v{background:var(--bg);border:1px solid var(--rule);border-radius:6px;padding:5px 9px;font-family:var(--mono);font-size:.82rem}
-.v b{color:var(--accent);font-weight:600}
-.v.hot{background:var(--mark);color:var(--mark-ink);border-color:var(--mark)}
-.v.hot b{color:var(--mark-ink)}
-.frame{font-size:.88rem;margin:10px 0 0;padding:9px 11px;background:var(--bg);border:1px solid var(--rule);border-radius:7px;min-height:2.6em}
-.counter{font-family:var(--mono);font-size:.78rem;color:var(--ink-soft);margin:8px 0 0}
+th,td{border:1px solid var(--rule);padding:6px 8px;text-align:left;vertical-align:middle}
+th{font-family:var(--mono);font-size:.72rem;text-transform:uppercase;letter-spacing:.04em;color:var(--ink-soft);font-weight:600}
+td.n{font-family:var(--mono);color:var(--ink-soft)}
+table input[type=number]{width:4.6em}
+tr.ok td{background:var(--good-bg)}
+tr.no td{background:var(--bad-bg)}
+td.mark{width:1.6em;text-align:center;font-weight:700}
+tr.ok td.mark{color:var(--good)}
+tr.no td.mark{color:var(--bad)}
+td.act{width:5.5em;white-space:nowrap}
+.hint{font-size:.85rem;color:var(--bad);margin:8px 0 0;min-height:1.2em}
+.scroller{overflow-x:auto}
 footer{font-size:.82rem;color:var(--ink-soft);border-top:1px solid var(--rule);padding-top:14px}
 </style>
 </head>
@@ -85,7 +81,7 @@ footer{font-size:.82rem;color:var(--ink-soft);border-top:1px solid var(--rule);p
   <header>
     <p class="sub" style="margin:0 0 4px"><a href="index.html">&larr; AHS CS Principles</a></p>
     <h1>Trace It: Procedures and Nested Loops</h1>
-    <p class="sub">Two(2) procedures. Both take arguments, and both have a loop inside a loop where the inner loop depends on those arguments. Predict first, then step through and see where you were off.</p>
+    <p class="sub">Two(2) procedures. Both take arguments, and both have a loop inside a loop where the inner loop depends on those arguments. Fill in the trace table a row at a time and check each row as you go.</p>
   </header>
 
   <section class="panel">
@@ -93,7 +89,7 @@ footer{font-size:.82rem;color:var(--ink-soft);border-top:1px solid var(--rule);p
     <p class="ask" style="margin-top:0">Two(2) things are different here, and they are the two(2) things that trip people up.</p>
     <p class="ask" style="margin:0 0 8px"><b>1. Nothing labels the slots.</b> In Snap! a block says <span style="font-family:var(--mono)">seats (rows:) (firstRow:)</span> &mdash; the slot tells you what goes in it. In <span style="font-family:var(--mono)">seats(5, 12)</span> the <b>position</b> is the only thing telling you which is which. First argument goes to the first parameter. Always.</p>
     <p class="ask" style="margin:0"><b>2. The inner loop runs a different number of times on every pass.</b> In Snap! you usually see <span style="font-family:var(--mono)">repeat (10)</span> and 10 is just 10. Here the inner loop says <span style="font-family:var(--mono)">REPEAT inRow TIMES</span>, and the outer loop <b>changes</b> <span style="font-family:var(--mono)">inRow</span> every time around. So "how many times does the inner loop run?" has a different answer each pass.</p>
-    <p class="note" style="margin-top:12px">Note: finish a step before the next one opens. If you are stuck, you can open it anyway &mdash; but guess first. Guessing and being wrong is how this one sticks.</p>
+    <p class="note" style="margin-top:12px">Note: fill in a whole row, then check it. Get it right and the row locks. Get it wrong twice and you can have that row &mdash; but work it out first. Being wrong on purpose is how this one sticks.</p>
   </section>
 
   <div id="problems"></div>
@@ -104,16 +100,15 @@ footer{font-size:.82rem;color:var(--ink-soft);border-top:1px solid var(--rule);p
 <script>
 "use strict";
 
-/* ---------- problem definitions ----------
-   Each problem generates its own trace by actually running the program in JS
-   and recording a frame per executed line. Nothing is hard-coded, so the
-   "try another call" stage works for any arguments.                        */
+/* Each problem computes its own answer rows by running the program in JS,
+   so the "different call" stage works for any arguments.                  */
 
 const P1 = {
   id: "p1",
   name: "blocks",
   params: ["layers", "topRow"],
   args: [3, 2],
+  altArgs: [4, 1],
   title: "Problem 1: the window display",
   context: "A store window display is built in layers. The top layer has <b>topRow</b> boxes. Each layer below it holds <b>twice(2) as many</b> boxes as the layer above it. The procedure returns how many boxes the whole display uses.",
   code: [
@@ -132,34 +127,24 @@ const P1 = {
     "  RETURN(total)",
     "}"
   ],
-  limits: { layers: [1, 5], topRow: [1, 4] },
-  passEnd: 10,
-  predictAsk: "Before you trace anything: how many times does the <b>inner</b> loop run on each pass of the outer loop?",
-  predictCols: [{ key: "trips", label: "Inner loop runs" }],
-  altArgs: [4, 1],
-  run(layers, topRow) {
-    const F = [], v = {};
-    const push = (line, note) => F.push({ line, note, vars: Object.assign({}, v) });
-    v[this.params[0]] = layers; v[this.params[1]] = topRow;
-    push(0, `Call <code>blocks(${layers}, ${topRow})</code>. First argument &rarr; <b>layers</b> = ${layers}. Second argument &rarr; <b>topRow</b> = ${topRow}.`);
-    v.total = 0; push(2, "Start the box count at 0.");
-    v.inRow = topRow; push(3, `The top layer has <b>${topRow}</b> boxes.`);
-    const rows = [];
+  rowLabel: "Outer pass",
+  columns: [
+    { key: "inRow", label: "inRow used by the inner loop", type: "num",
+      hint: "inRow only doubles at the <b>end</b> of a pass, so pass 1 still uses the starting value." },
+    { key: "total", label: "total at the end of this pass", type: "num",
+      hint: "total is the running total from the very beginning, not just the boxes added on this pass." }
+  ],
+  rows(layers, topRow) {
+    const out = []; let total = 0, inRow = topRow;
     for (let p = 1; p <= layers; p++) {
-      push(4, `Outer pass <b>${p}</b> of ${layers}.`);
-      const trips = v.inRow;
-      rows.push([trips]);
-      push(6, `The inner loop will run <b>${trips}</b> times this pass, because inRow is ${trips} right now.`);
-      for (let i = 1; i <= trips; i++) {
-        v.total += 1;
-        push(8, `Inner trip ${i} of ${trips}. total is now <b>${v.total}</b>.`);
-      }
-      v.inRow = v.inRow * 2;
-      push(10, `End of pass ${p}. Double inRow: it is now <b>${v.inRow}</b>.`);
+      const used = inRow;
+      for (let i = 0; i < used; i++) total += 1;
+      inRow = inRow * 2;
+      out.push({ inRow: used, total: total });
     }
-    push(12, `No passes left. Return <b>${v.total}</b>.`);
-    return { frames: F, result: v.total, predict: rows };
-  }
+    return out;
+  },
+  result(layers, topRow) { const r = this.rows(layers, topRow); return r[r.length - 1].total; }
 };
 
 const P2 = {
@@ -167,6 +152,7 @@ const P2 = {
   name: "charge",
   params: ["days", "firstDay"],
   args: [4, 3],
+  altArgs: [3, 5],
   title: "Problem 2: the print shop",
   context: "A print shop tracks what it earns. On the first day it prints <b>firstDay</b> posters, and every day after that it prints <b>two(2) more</b> than the day before. A poster normally costs $10 &mdash; but on any day the shop prints <b>more than five(5)</b> posters, <b>every</b> poster that day costs $8.",
   code: [
@@ -192,42 +178,30 @@ const P2 = {
     "  RETURN(total)",
     "}"
   ],
-  limits: { days: [1, 5], firstDay: [1, 6] },
-  passEnd: 17,
-  predictAsk: "Before you trace anything: on each day, how many posters are printed, and what does <b>each one</b> cost?",
-  predictCols: [{ key: "posters", label: "Posters" }, { key: "price", label: "Price each" }],
-  altArgs: [3, 5],
-  run(days, firstDay) {
-    const F = [], v = {};
-    const push = (line, note) => F.push({ line, note, vars: Object.assign({}, v) });
-    v[this.params[0]] = days; v[this.params[1]] = firstDay;
-    push(0, `Call <code>charge(${days}, ${firstDay})</code>. First argument &rarr; <b>days</b> = ${days}. Second argument &rarr; <b>firstDay</b> = ${firstDay}.`);
-    v.total = 0; push(2, "Start the money at 0.");
-    v.jobs = firstDay; push(3, `Day one prints <b>${firstDay}</b> posters.`);
-    const rows = [];
+  rowLabel: "Day",
+  columns: [
+    { key: "jobs", label: "jobs (posters today)", type: "num",
+      hint: "jobs only goes up at the <b>end</b> of a day, so day 1 prints the starting number." },
+    { key: "cheap", label: "Is jobs &gt; 5?", type: "yesno",
+      hint: "Compare <b>today&rsquo;s</b> posters to five. Exactly five is not <i>more than</i> five." },
+    { key: "total", label: "total at the end of this day", type: "num",
+      hint: "Every poster that day costs the same, and total carries over from yesterday." }
+  ],
+  rows(days, firstDay) {
+    const out = []; let total = 0, jobs = firstDay;
     for (let d = 1; d <= days; d++) {
-      push(4, `Outer pass <b>${d}</b> of ${days}. This is day ${d}.`);
-      const trips = v.jobs, cheap = v.jobs > 5;
-      rows.push([trips, cheap ? 8 : 10]);
-      push(6, `The inner loop will run <b>${trips}</b> times today, one per poster.`);
-      for (let i = 1; i <= trips; i++) {
-        push(8, cheap
-          ? `Poster ${i} of ${trips}. Is jobs &gt; 5? <b>${trips} &gt; 5 is true</b>, so this poster is $8.`
-          : `Poster ${i} of ${trips}. Is jobs &gt; 5? <b>${trips} &gt; 5 is false</b>, so this poster is $10.`);
-        v.total += cheap ? 8 : 10;
-        push(cheap ? 10 : 14, `total is now <b>${v.total}</b>.`);
-      }
-      v.jobs += 2;
-      push(17, `End of day ${d}. Tomorrow prints <b>${v.jobs}</b> posters.`);
+      const cheap = jobs > 5, used = jobs;
+      for (let i = 0; i < used; i++) total += cheap ? 8 : 10;
+      jobs += 2;
+      out.push({ jobs: used, cheap: cheap ? "yes" : "no", total: total });
     }
-    push(19, `No days left. Return <b>${v.total}</b>.`);
-    return { frames: F, result: v.total, predict: rows };
-  }
+    return out;
+  },
+  result(days, firstDay) { const r = this.rows(days, firstDay); return r[r.length - 1].total; }
 };
 
 const PROBLEMS = [P1, P2];
 
-/* ---------- small helpers ---------- */
 const el = (t, c, h) => { const n = document.createElement(t); if (c) n.className = c; if (h !== undefined) n.innerHTML = h; return n; };
 const num = v => { const n = parseInt(String(v).replace(/[^0-9-]/g, ""), 10); return Number.isFinite(n) ? n : null; };
 
@@ -236,12 +210,11 @@ function codeBlock(lines) {
   lines.forEach((t, i) => {
     const r = el("div", "ln");
     r.appendChild(el("span", "g", String(i + 1)));
-    r.appendChild(el("span", "t", t.replace(/&/g, "&amp;").replace(/</g, "&lt;")));
+    r.appendChild(el("span", null, t.replace(/&/g, "&amp;").replace(/</g, "&lt;")));
     box.appendChild(r);
   });
   return box;
 }
-
 function stage(n, titleText) {
   const s = el("section", "stage");
   const h = el("div", "shead");
@@ -250,31 +223,23 @@ function stage(n, titleText) {
   s.appendChild(h);
   return s;
 }
+function verdict(node, ok, msg) { node.className = "verdict " + (ok ? "ok" : "no"); node.innerHTML = msg; node.hidden = false; }
 
-function verdict(node, ok, msg) {
-  node.className = "verdict " + (ok ? "ok" : "no");
-  node.innerHTML = msg;
-  node.hidden = false;
-}
-
-/* ---------- build one problem ---------- */
 function build(P) {
   const root = el("section", "panel prob");
   const [a0, a1] = P.args;
-  const trace = P.run(a0, a1);
+  let callArgs = [a0, a1];
+  let answers = P.rows(a0, a1);
 
   root.appendChild(el("h3", null, P.title));
   root.appendChild(el("p", "ctx", P.context));
 
   const two = el("div", "two");
-  const left = el("div");
-  left.appendChild(codeBlock(P.code));
-  two.appendChild(left);
-  const right = el("div");
-  two.appendChild(right);
+  const left = el("div"); left.appendChild(codeBlock(P.code)); two.appendChild(left);
+  const right = el("div"); two.appendChild(right);
   root.appendChild(two);
 
-  /* ---- Step 1: bind arguments ---- */
+  /* Step 1 - bind arguments */
   const s1 = stage(1, "Match the arguments");
   s1.appendChild(el("p", "ask", `Someone calls <code>${P.name}(${a0}, ${a1})</code>. Fill in what each parameter is set to.`));
   const f1 = el("div");
@@ -285,173 +250,189 @@ function build(P) {
   });
   s1.appendChild(f1);
   const v1 = el("p", "verdict"); v1.hidden = true;
-  const act1 = el("div", "actions");
-  const b1 = el("button", null, "Check");
-  act1.appendChild(b1);
+  const act1 = el("div", "actions"); const b1 = el("button", null, "Check"); act1.appendChild(b1);
   s1.appendChild(act1); s1.appendChild(v1);
   right.appendChild(s1);
 
-  /* ---- Step 2: predict the inner loop ---- */
-  const s2 = stage(2, "Predict the inner loop"); s2.hidden = true;
-  s2.appendChild(el("p", "ask", P.predictAsk));
+  /* Step 2 - the trace table */
+  const s2 = stage(2, "Fill in the trace table"); s2.hidden = true;
+  const ask2 = el("p", "ask", "");
+  s2.appendChild(ask2);
+  const scroller = el("div", "scroller");
   const tbl = el("table");
-  const thead = el("tr");
-  thead.appendChild(el("th", null, "Outer pass"));
-  P.predictCols.forEach(c => thead.appendChild(el("th", null, c.label)));
-  tbl.appendChild(thead);
-  trace.predict.forEach((_, r) => {
-    const tr = el("tr");
-    tr.appendChild(el("td", "n", String(r + 1)));
-    P.predictCols.forEach((c, ci) => {
-      const td = el("td");
-      const inp = el("input"); inp.type = "number";
-      inp.dataset.r = String(r); inp.dataset.c = String(ci);
-      td.appendChild(inp); tr.appendChild(td);
-    });
-    tbl.appendChild(tr);
-  });
-  s2.appendChild(tbl);
-  const v2 = el("p", "verdict"); v2.hidden = true;
-  const act2 = el("div", "actions"); act2.style.marginTop = "10px";
-  const b2 = el("button", null, "Check");
-  const b2s = el("button", "ghost", "I am stuck, open the trace");
-  act2.appendChild(b2); act2.appendChild(b2s);
-  s2.appendChild(act2); s2.appendChild(v2);
+  scroller.appendChild(tbl);
+  s2.appendChild(scroller);
+  const hint = el("p", "hint", "");
+  const act2 = el("div", "actions");
+  const bAll = el("button", null, "Check every row");
+  const bClear = el("button", "ghost", "Clear the table");
+  act2.appendChild(bAll); act2.appendChild(bClear);
+  s2.appendChild(hint); s2.appendChild(act2);
   right.appendChild(s2);
 
-  /* ---- Step 3: step through it ---- */
-  const s3 = stage(3, "Step through it"); s3.hidden = true;
-  s3.appendChild(el("p", "ask", "Walk the program one line at a time. Watch the highlighted line on the left and what the variables do."));
-  const vars = el("div", "vars");
-  const frame = el("div", "frame", "Press <b>Step</b> to begin.");
-  const counter = el("p", "counter", "");
-  const act3 = el("div", "actions"); act3.style.marginTop = "10px";
-  const bStep = el("button", null, "Step");
-  const bPass = el("button", "ghost", "Finish this pass");
-  const bReset = el("button", "ghost", "Start over");
-  act3.appendChild(bStep); act3.appendChild(bPass); act3.appendChild(bReset);
-  s3.appendChild(vars); s3.appendChild(frame); s3.appendChild(counter); s3.appendChild(act3);
+  /* Step 3 - the return value */
+  const s3 = stage(3, "What does it return?"); s3.hidden = true;
+  const ask3 = el("p", "ask", "");
+  s3.appendChild(ask3);
+  const i3 = el("input"); i3.type = "number";
+  const l3 = el("label", "f", "Answer ="); l3.appendChild(i3);
+  s3.appendChild(l3);
+  const v3 = el("p", "verdict"); v3.hidden = true;
+  const act3 = el("div", "actions"); const b3 = el("button", null, "Check"); act3.appendChild(b3);
+  s3.appendChild(act3); s3.appendChild(v3);
   right.appendChild(s3);
 
-  /* ---- Step 4: final answer ---- */
-  const s4 = stage(4, "What does it return?"); s4.hidden = true;
-  s4.appendChild(el("p", "ask", `What does <code>${P.name}(${a0}, ${a1})</code> return?`));
+  /* Step 4 - a different call */
+  const s4 = stage(4, "Now a different call"); s4.hidden = true;
+  const [b0, b1v] = P.altArgs;
+  s4.appendChild(el("p", "ask",
+    `Same procedure, different arguments. What does <code>${P.name}(${b0}, ${b1v})</code> return?`));
   const i4 = el("input"); i4.type = "number";
   const l4 = el("label", "f", "Answer ="); l4.appendChild(i4);
   s4.appendChild(l4);
   const v4 = el("p", "verdict"); v4.hidden = true;
   const act4 = el("div", "actions");
   const b4 = el("button", null, "Check");
-  act4.appendChild(b4);
+  const b4t = el("button", "ghost", "Give me a trace table for this one");
+  act4.appendChild(b4); act4.appendChild(b4t);
   s4.appendChild(act4); s4.appendChild(v4);
   right.appendChild(s4);
 
-  /* ---- Step 5: a different call ---- */
-  const s5 = stage(5, "Now a different call"); s5.hidden = true;
-  const [b0, b1v] = P.altArgs;
-  s5.appendChild(el("p", "ask",
-    `No tracing help this time. Work it out on paper, then check.<br>What does <code>${P.name}(${b0}, ${b1v})</code> return?`));
-  const i5 = el("input"); i5.type = "number";
-  const l5 = el("label", "f", "Answer ="); l5.appendChild(i5);
-  s5.appendChild(l5);
-  const v5 = el("p", "verdict"); v5.hidden = true;
-  const act5 = el("div", "actions");
-  const b5 = el("button", null, "Check");
-  const b5t = el("button", "ghost", "Trace this one instead");
-  act5.appendChild(b5); act5.appendChild(b5t);
-  s5.appendChild(act5); s5.appendChild(v5);
-  right.appendChild(s5);
+  /* ---- trace table rendering ---- */
+  const tries = {};
+  function renderTable() {
+    tbl.innerHTML = "";
+    ask2.innerHTML = `One row per pass of the <b>outer</b> loop for <code>${P.name}(${callArgs[0]}, ${callArgs[1]})</code>. Work out a whole row, then check it.`;
+    ask3.innerHTML = `What does <code>${P.name}(${callArgs[0]}, ${callArgs[1]})</code> return?`;
+    const hr = el("tr");
+    hr.appendChild(el("th", null, ""));
+    hr.appendChild(el("th", null, P.rowLabel));
+    P.columns.forEach(c => hr.appendChild(el("th", null, c.label)));
+    hr.appendChild(el("th", null, ""));
+    tbl.appendChild(hr);
 
-  /* ---------- behavior ---------- */
-  let cur = trace, idx = -1;
-
-  function paintCode(line) {
-    const rows = left.querySelectorAll(".ln");
-    rows.forEach((r, i) => r.classList.toggle("on", i === line));
-  }
-  function paintVars(f, prev) {
-    vars.innerHTML = "";
-    Object.keys(f.vars).forEach(k => {
-      const changed = prev && prev.vars[k] !== f.vars[k];
-      const chip = el("div", "v" + (changed ? " hot" : ""), `<b>${k}</b> = ${f.vars[k]}`);
-      vars.appendChild(chip);
+    answers.forEach((_, r) => {
+      tries[r] = 0;
+      const tr = el("tr"); tr.dataset.r = String(r);
+      tr.appendChild(el("td", "mark", ""));
+      tr.appendChild(el("td", "n", String(r + 1)));
+      P.columns.forEach(c => {
+        const td = el("td");
+        let f;
+        if (c.type === "yesno") {
+          f = el("select");
+          [["", "—"], ["yes", "yes"], ["no", "no"]].forEach(([v, t]) => {
+            const o = el("option", null, t); o.value = v; f.appendChild(o);
+          });
+        } else { f = el("input"); f.type = "number"; }
+        f.dataset.r = String(r); f.dataset.k = c.key;
+        td.appendChild(f); tr.appendChild(td);
+      });
+      const ta = el("td", "act");
+      const b = el("button", "mini", "Check");
+      b.dataset.r = String(r);
+      ta.appendChild(b); tr.appendChild(ta);
+      tbl.appendChild(tr);
     });
   }
-  function show(i) {
-    const f = cur.frames[i], prev = i > 0 ? cur.frames[i - 1] : null;
-    paintCode(f.line);
-    paintVars(f, prev);
-    frame.innerHTML = f.note;
-    counter.textContent = `Line ${f.line + 1} · step ${i + 1} of ${cur.frames.length}`;
-    bStep.disabled = i >= cur.frames.length - 1;
-    bPass.disabled = bStep.disabled;
-    if (i >= cur.frames.length - 1) { s4.hidden = false; }
+
+  function rowFields(r) { return Array.from(tbl.querySelectorAll(`[data-r="${r}"][data-k]`)); }
+
+  function checkRow(r, reveal) {
+    const tr = tbl.querySelector(`tr[data-r="${r}"]`);
+    const fields = rowFields(r);
+    const want = answers[r];
+    if (reveal) {
+      fields.forEach(f => { f.value = String(want[f.dataset.k]); });
+    }
+    const blank = fields.some(f => f.value === "" || f.value === null);
+    if (blank && !reveal) {
+      hint.innerHTML = "Fill in the whole row first. Guess if you have to.";
+      return false;
+    }
+    let bad = null;
+    for (const f of fields) {
+      const k = f.dataset.k;
+      const col = P.columns.find(c => c.key === k);
+      const got = col.type === "yesno" ? f.value : num(f.value);
+      if (String(got) !== String(want[k])) { bad = col; break; }
+    }
+    tr.classList.remove("ok", "no");
+    const mark = tr.querySelector("td.mark");
+    const btn = tr.querySelector("button");
+    if (bad === null) {
+      tr.classList.add("ok"); mark.textContent = "✓";
+      fields.forEach(f => { f.disabled = true; });
+      btn.disabled = true;
+      hint.innerHTML = "";
+      if (Array.from(tbl.querySelectorAll("tr[data-r]")).every(x => x.classList.contains("ok"))) {
+        s3.hidden = false;
+      }
+      return true;
+    }
+    tries[r] = (tries[r] || 0) + 1;
+    tr.classList.add("no"); mark.textContent = "✗";
+    hint.innerHTML = `Row ${r + 1}: <b>${bad.label.replace(/&gt;/g, ">")}</b> is not right. ${bad.hint}` +
+      (tries[r] >= 2 ? ` <button class="mini ghost" data-reveal="${r}" style="margin-left:6px">Show me this row</button>` : "");
+    return false;
   }
-  bStep.addEventListener("click", () => { if (idx < cur.frames.length - 1) show(++idx); });
-  bPass.addEventListener("click", () => {
-    // run forward to the next "end of pass" line, or the end
-    const endLine = P.passEnd;
-    let i = idx;
-    do { i++; } while (i < cur.frames.length - 1 && cur.frames[i].line !== endLine);
-    idx = i; show(idx);
+
+  tbl.addEventListener("click", e => {
+    const b = e.target.closest("button[data-r]");
+    if (b) { checkRow(+b.dataset.r, false); }
   });
-  bReset.addEventListener("click", () => { idx = -1; paintCode(-1); vars.innerHTML = ""; frame.innerHTML = "Press <b>Step</b> to begin."; counter.textContent = ""; bStep.disabled = false; bPass.disabled = false; });
+  hint.addEventListener("click", e => {
+    const b = e.target.closest("button[data-reveal]");
+    if (b) { checkRow(+b.dataset.reveal, true); }
+  });
+  bAll.addEventListener("click", () => {
+    const rows = Array.from(tbl.querySelectorAll("tr[data-r]"));
+    for (const tr of rows) {
+      if (tr.classList.contains("ok")) continue;
+      if (!checkRow(+tr.dataset.r, false)) return;   // stop at the first row that is wrong
+    }
+  });
+  bClear.addEventListener("click", () => { renderTable(); hint.innerHTML = ""; });
 
   b1.addEventListener("click", () => {
     const got = Array.from(f1.querySelectorAll("input")).map(i => num(i.value));
     if (got.some(g => g === null)) { verdict(v1, false, "Fill in both boxes first."); return; }
-    const ok = got[0] === a0 && got[1] === a1;
-    if (ok) {
+    if (got[0] === a0 && got[1] === a1) {
       verdict(v1, true, `Yes. The call is <code>${P.name}(${a0}, ${a1})</code>, so <b>${P.params[0]}</b> = ${a0} and <b>${P.params[1]}</b> = ${a1}. The order of the arguments is the only thing that decides this.`);
       s2.hidden = false;
     } else {
-      verdict(v1, false, `Not yet. You have them swapped. The <b>first</b> argument always goes to the <b>first</b> parameter &mdash; read the PROCEDURE line on the left: <code>${P.code[0]}</code>.`);
+      verdict(v1, false, `Not yet &mdash; you have them swapped. The <b>first</b> argument goes to the <b>first</b> parameter. Read the PROCEDURE line on the left: <code>${P.code[0]}</code>.`);
     }
   });
 
-  b2.addEventListener("click", () => {
-    const inputs = Array.from(tbl.querySelectorAll("input"));
-    if (inputs.some(i => num(i.value) === null)) { verdict(v2, false, "Fill in every box first. Guess if you have to."); return; }
-    let wrong = 0, firstBad = -1;
-    inputs.forEach(i => {
-      const r = +i.dataset.r, c = +i.dataset.c;
-      if (num(i.value) !== cur.predict[r][c]) { wrong++; if (firstBad < 0) firstBad = r; }
-    });
-    if (wrong === 0) {
-      verdict(v2, true, "All correct. Now step through and watch it happen.");
+  b3.addEventListener("click", () => {
+    const want = answers[answers.length - 1].total;
+    const g = num(i3.value);
+    if (g === null) { verdict(v3, false, "Put a number in first."); return; }
+    if (g === want) {
+      verdict(v3, true, `Correct, <b>${want}</b>. It is the last value of total in your table &mdash; the procedure returns it once the outer loop runs out of passes.`);
+      s4.hidden = false;
     } else {
-      verdict(v2, false, `${wrong} of these ${wrong === 1 ? "is" : "are"} off &mdash; the first one is pass <b>${firstBad + 1}</b>. Step through and watch what changes at the end of each pass.`);
+      verdict(v3, false, "Not quite. Look at the bottom row of your table: the answer is already sitting in it.");
     }
-    s3.hidden = false;
   });
-  b2s.addEventListener("click", () => { s3.hidden = false; b2s.hidden = true; });
 
   b4.addEventListener("click", () => {
+    const want = P.result(b0, b1v);
     const g = num(i4.value);
     if (g === null) { verdict(v4, false, "Put a number in first."); return; }
-    if (g === cur.result) {
-      verdict(v4, true, `Correct, <b>${cur.result}</b>.`);
-      s5.hidden = false;
-    } else {
-      verdict(v4, false, `Not quite. Step back through and add up what the inner loop contributes on <b>each</b> pass &mdash; those amounts are not all the same.`);
-    }
+    if (g === want) verdict(v4, true, `Correct, <b>${want}</b>. You can do these without the table now.`);
+    else verdict(v4, false, "Not yet. Use the button below to lay out a table for this call and find where you lost it.");
+  });
+  b4t.addEventListener("click", () => {
+    callArgs = [b0, b1v];
+    answers = P.rows(b0, b1v);
+    renderTable(); hint.innerHTML = "";
+    s2.hidden = false;
+    s2.scrollIntoView({ behavior: "smooth", block: "center" });
   });
 
-  b5.addEventListener("click", () => {
-    const alt = P.run(b0, b1v);
-    const g = num(i5.value);
-    if (g === null) { verdict(v5, false, "Put a number in first."); return; }
-    if (g === alt.result) verdict(v5, true, `Correct, <b>${alt.result}</b>. You can do these without the stepper now.`);
-    else verdict(v5, false, "Not yet. Use the button below to trace this call and find where you lost it.");
-  });
-  b5t.addEventListener("click", () => {
-    cur = P.run(b0, b1v); idx = -1;
-    paintCode(-1); vars.innerHTML = "";
-    frame.innerHTML = `Now tracing <b>${P.name}(${b0}, ${b1v})</b>. Press <b>Step</b>.`;
-    counter.textContent = ""; bStep.disabled = false; bPass.disabled = false;
-    s3.hidden = false; s3.scrollIntoView({ behavior: "smooth", block: "center" });
-  });
-
+  renderTable();
   return root;
 }
 
