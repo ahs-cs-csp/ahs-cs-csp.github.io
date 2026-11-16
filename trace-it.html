@@ -85,11 +85,9 @@ footer{font-size:.82rem;color:var(--ink-soft);border-top:1px solid var(--rule);p
   </header>
 
   <section class="panel">
-    <h2>Why this feels harder than Snap!</h2>
-    <p class="ask" style="margin-top:0">Two(2) things are different here, and they are the two(2) things that trip people up.</p>
-    <p class="ask" style="margin:0 0 8px"><b>1. Nothing labels the slots.</b> In Snap! a block says <span style="font-family:var(--mono)">seats (rows:) (firstRow:)</span> &mdash; the slot tells you what goes in it. In <span style="font-family:var(--mono)">seats(5, 12)</span> the <b>position</b> is the only thing telling you which is which. First argument goes to the first parameter. Always.</p>
-    <p class="ask" style="margin:0"><b>2. The inner loop runs a different number of times on every pass.</b> In Snap! you usually see <span style="font-family:var(--mono)">repeat (10)</span> and 10 is just 10. Here the inner loop says <span style="font-family:var(--mono)">REPEAT inRow TIMES</span>, and the outer loop <b>changes</b> <span style="font-family:var(--mono)">inRow</span> every time around. So "how many times does the inner loop run?" has a different answer each pass.</p>
-    <p class="note" style="margin-top:12px">Note: fill in a whole row, then check it. Get it right and the row locks. Get it wrong twice and you can have that row &mdash; but work it out first. Being wrong on purpose is how this one sticks.</p>
+    <h2>How this works</h2>
+    <p class="ask" style="margin-top:0">Each problem gives you a procedure and one call. Work out what each parameter is set to, fill in the trace table one row per pass of the <b>outer</b> loop, then say what the procedure returns.</p>
+    <p class="note">Note: fill in a whole row, then check it. Get it right and the row locks. Get it wrong twice and you can have that row &mdash; but work it out first. Being wrong on purpose is how this one sticks.</p>
   </section>
 
   <div id="problems"></div>
